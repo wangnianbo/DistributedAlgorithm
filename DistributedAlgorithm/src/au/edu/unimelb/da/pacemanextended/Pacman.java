@@ -71,6 +71,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener
   /* This repaint function repaints only the parts of the screen that may have changed.
      Namely the area around every player ghost and the menu bars
   */
+  @Override
   public void repaint()
   {
     if (b.player.teleport)

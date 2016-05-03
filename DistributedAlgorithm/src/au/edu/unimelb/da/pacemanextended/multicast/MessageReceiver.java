@@ -5,18 +5,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-public abstract class MessageSender{
+import au.edu.unimelb.da.pacemanextended.Pacman;
+
+public abstract class MessageReceiver{
 	
 	//string is playerID like player1, player2
 	private String playerID;
 	
 	//string is playerID like player1, player2
-	private Map<String, Socket> sendSocketList; 
+	private List<ServerSocket> serverSocketList; 
 	
-	public abstract boolean putMessage(String jsonMsg);
+	public abstract String backMessage();
+	
+	public abstract boolean isNext();
 
 	public String getPlayerID() {
 		return playerID;
@@ -26,16 +31,15 @@ public abstract class MessageSender{
 		this.playerID = playerID;
 	}
 
-	public Map<String, Socket> getSendSocketList() {
-		return sendSocketList;
+	public List<ServerSocket> getServerSocketList() {
+		return serverSocketList;
 	}
 
-	public void setSendSocketList(Map<String, Socket> sendSocketList) {
-		this.sendSocketList = sendSocketList;
+	public void setServerSocketList(List<ServerSocket> serverSocketList) {
+		this.serverSocketList = serverSocketList;
 	}
 	
 	
 		
-	
 
 }
