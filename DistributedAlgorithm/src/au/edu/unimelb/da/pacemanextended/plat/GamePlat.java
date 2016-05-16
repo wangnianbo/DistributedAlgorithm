@@ -65,7 +65,7 @@ public class GamePlat {
 		if (gamePlat.messageSender.getPlayerID().equals("player1")) {
 			int count =0;
 			while (true) {
-				
+				 
 				gamePlat.messageSender.putMessage("player1 Sending Message: "+ ++count);
 				try {
 					Thread.sleep(1000);
