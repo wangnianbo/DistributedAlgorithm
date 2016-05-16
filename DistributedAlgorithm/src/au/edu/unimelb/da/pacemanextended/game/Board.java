@@ -1,5 +1,5 @@
 /* Drew Schuster */
-package au.edu.unimelb.da.pacemanextended;
+package au.edu.unimelb.da.pacemanextended.game;
 import java.awt.*;
 import javax.imageio.*;
 import javax.swing.JPanel;

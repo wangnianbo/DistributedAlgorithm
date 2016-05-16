@@ -1,4 +1,4 @@
-package au.edu.unimelb.da.pacemanextended;
+package au.edu.unimelb.da.pacemanextended.game;
 
 import java.util.HashSet;
 import java.util.Set;

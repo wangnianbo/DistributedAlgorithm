@@ -1,5 +1,5 @@
 /* Drew Schuster */
-package au.edu.unimelb.da.pacemanextended;
+package au.edu.unimelb.da.pacemanextended.game;
 import java.io.*;
 import java.net.URL;
 import javax.sound.sampled.*;

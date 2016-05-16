@@ -1,4 +1,4 @@
-package au.edu.unimelb.da.pacemanextended;
+package au.edu.unimelb.da.pacemanextended.game;
 
 
 /* Both Player and Ghost inherit Mover.  Has generic functions relevant to both*/

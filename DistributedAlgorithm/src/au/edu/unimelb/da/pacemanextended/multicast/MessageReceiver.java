@@ -11,12 +11,15 @@ public abstract class MessageReceiver{
 	private String playerID;
 	
 	//string is playerID like player1, player2
-	private List<Socket> serverSocketList = new ArrayList<Socket>(); 
+	private List<Socket> serverSocketList ; 
+	
+	public MessageReceiver(String playerID, List<Socket> serverSocketList){
+		this.playerID = playerID;
+		this.serverSocketList = serverSocketList;
+	}
 	
 	public abstract String backMessage();
 	
-	public abstract boolean isNext();
-
 	public String getPlayerID() {
 		return playerID;
 	}
