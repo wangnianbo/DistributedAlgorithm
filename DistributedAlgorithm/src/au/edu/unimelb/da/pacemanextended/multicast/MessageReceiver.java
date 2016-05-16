@@ -1,15 +1,9 @@
 package au.edu.unimelb.da.pacemanextended.multicast;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import au.edu.unimelb.da.pacemanextended.Pacman;
 
 public abstract class MessageReceiver{
 	
@@ -17,7 +11,7 @@ public abstract class MessageReceiver{
 	private String playerID;
 	
 	//string is playerID like player1, player2
-	private List<ServerSocket> serverSocketList; 
+	private List<Socket> serverSocketList = new ArrayList<Socket>(); 
 	
 	public abstract String backMessage();
 	
@@ -31,12 +25,12 @@ public abstract class MessageReceiver{
 		this.playerID = playerID;
 	}
 
-	public List<ServerSocket> getServerSocketList() {
+	public List<Socket> getServerSocketList() {
 		return serverSocketList;
 	}
 
-	public void setServerSocketList(List<ServerSocket> serverSocketList) {
-		this.serverSocketList = serverSocketList;
+	public void addServerSocket(Socket serverSocket) {
+		this.serverSocketList.add(serverSocket);
 	}
 	
 	

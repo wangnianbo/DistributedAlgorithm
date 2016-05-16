@@ -1,12 +1,8 @@
 package au.edu.unimelb.da.pacemanextended.multicast;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 public abstract class MessageSender{
 	
@@ -14,7 +10,7 @@ public abstract class MessageSender{
 	private String playerID;
 	
 	//string is playerID like player1, player2
-	private Map<String, Socket> sendSocketList; 
+	private Map<String, Socket> sendSocketMap = new HashMap<String, Socket>(); 
 	
 	public abstract boolean putMessage(String jsonMsg);
 
@@ -26,12 +22,12 @@ public abstract class MessageSender{
 		this.playerID = playerID;
 	}
 
-	public Map<String, Socket> getSendSocketList() {
-		return sendSocketList;
+	public Map<String, Socket> getSendSocketMap() {
+		return sendSocketMap;
 	}
 
-	public void setSendSocketList(Map<String, Socket> sendSocketList) {
-		this.sendSocketList = sendSocketList;
+	public void setSendSocket(String playerID, Socket socket) {
+		this.sendSocketMap.put(this.playerID, socket);
 	}
 	
 	
