@@ -9,6 +9,10 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import au.edu.unimelb.da.pacemanextended.game.Node;
+import au.edu.unimelb.da.pacemanextended.game.Response_thread;
+import au.edu.unimelb.da.pacemanextended.game.Send_thread;
+import au.edu.unimelb.da.pacemanextended.game.Time_out;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageCenter;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageReceiver;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageSender;
@@ -21,7 +25,7 @@ public class GamePlat {
 	private static final Logger logger = Logger.getLogger(GamePlat.class
 			.getName());
 
-	public static final int playerNumber = 4;
+	public static final int playerNumber = 2;
 	
 	String[] addressArray = {"localhost:40001","localhost:40002","localhost:40003","localhost:40004"};
 
@@ -32,6 +36,8 @@ public class GamePlat {
 	public MessageCenter messageCenter;
 	
 	public String localPlayerID;
+	
+	public Node node= new Node();
 
 	public GamePlat() {
 
@@ -150,30 +156,15 @@ public class GamePlat {
 	
 	public static void main(String[] args) {
 		GamePlat gamePlat = new GamePlat();
-		if (gamePlat.messageSender.getPlayerID().equals("player1")) {
-		int count =0;
-		while (true) {
-			 
-			gamePlat.messageCenter.putMessage("player1 Sending Message: "+ ++count);
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		
+		Response_thread response = new Response_thread(gamePlat);
+		Send_thread send = new Send_thread(gamePlat);
+		Time_out time = new Time_out(gamePlat);
+		
+		response.start();
+		send.start();
+		time.start();
 
-		}
-	} else {
-		while (true) {
-				System.out.println(gamePlat.messageSender.getPlayerID()+" getting Message:  " + gamePlat.messageCenter.backMessage());
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
 	}
 
 }
