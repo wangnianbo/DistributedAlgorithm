@@ -78,8 +78,8 @@ public class Board extends JPanel
      pacman is in the process of dying */
   int dying=0;
  
-  /* Score information */
-  int currScore;
+  /* Score information  */
+  int[] currScore;
   int highScore;
 
   /* if the high scores have been cleared, we have to update the top of the screen to reflect that */
@@ -125,7 +125,10 @@ public class Board extends JPanel
 	}
     initHighScores();
     sounds = new GameSounds();
-    currScore=0;
+    currScore=new int[numberOfPlayers];
+    for (int i = 0; i < numberOfPlayers; i++) {
+    	currScore[i] =0;
+    }
     stopped=false;
     max=400;
     gridSize=20;
@@ -443,9 +446,16 @@ public class Board extends JPanel
             else
             {
             /* Game over for player.  If relevant, update high score.  Set gameOver flag*/
-              if (currScore > highScore)
+            	int counter = 0;
+            	for (int i = 0; i < numberOfPlayers; i++) {
+            		if(currScore[i]> counter){
+            			counter = currScore[i];
+            		}
+					
+				}
+              if (counter > highScore)
               {
-                updateScore(currScore);
+                updateScore(counter);
               }
               overScreen=true;
             }
@@ -503,7 +513,16 @@ public class Board extends JPanel
       if (demo)
         g.drawString("DEMO MODE PRESS ANY KEY TO START A GAME\t High Score: "+highScore,20,10);
       else
-        g.drawString("Score: "+(currScore)+"\t High Score: "+highScore,20,10);
+    	  
+//        g.drawString("Score: "+(currScore)+"\t High Score: "+highScore,20,10);
+      {
+    	  String scoreDisplayString ="";
+    	  for (int j = 0; j < currScore.length; j++) {
+    		  scoreDisplayString = scoreDisplayString+ "P"+(j+1)+": "+currScore[j]+" ";
+		}
+        g.drawString(scoreDisplayString+"High Score: "+highScore,20,10);
+      }
+    	  
     }
    
     /* oops is set to true when pacman has lost a life */ 
@@ -522,7 +541,9 @@ public class Board extends JPanel
       ghost2 = new Ghost(200,180);
       ghost3 = new Ghost(220,180);
       ghost4 = new Ghost(220,180);
-      currScore = 0;
+      for (int i = 0; i < numberOfPlayers; i++) {
+      	currScore[i] =0;
+      }
       drawBoard(g);
       drawPellets(g);
       drawLives(g);
@@ -550,7 +571,14 @@ public class Board extends JPanel
       if (demo)
         g.drawString("DEMO MODE PRESS ANY KEY TO START A GAME\t High Score: "+highScore,20,10);
       else
-        g.drawString("Score: "+(currScore)+"\t High Score: "+highScore,20,10);
+//        g.drawString("Score: "+(currScore)+"\t High Score: "+highScore,20,10);
+      {
+    	  String scoreDisplayString ="";
+    	  for (int j = 0; j < currScore.length; j++) {
+    		  scoreDisplayString = scoreDisplayString+ "P"+(j+1)+": "+currScore[j]+" ";
+		}
+        g.drawString(scoreDisplayString+"High Score: "+highScore,20,10);
+      }
       New++;
     }
     /* Second frame of new game */
@@ -659,7 +687,7 @@ public class Board extends JPanel
       pellets[playerList.get(i).pelletX][playerList.get(i).pelletY]=false;
 
       /* Increment the score */
-      currScore += 50;
+      currScore[i] += 50;
 
       /* Update the screen to reflect the new score */
       g.setColor(Color.BLACK);
@@ -669,7 +697,13 @@ public class Board extends JPanel
       if (demo)
         g.drawString("DEMO MODE PRESS ANY KEY TO START A GAME\t High Score: "+highScore,20,10);
       else
-        g.drawString("Score: "+(currScore)+"\t High Score: "+highScore,20,10);
+      {
+    	  String scoreDisplayString ="";
+    	  for (int j = 0; j < currScore.length; j++) {
+    		  scoreDisplayString = scoreDisplayString+ "P"+(j+1)+": "+currScore[j]+" ";
+		}
+        g.drawString(scoreDisplayString+"High Score: "+highScore,20,10);
+      }
 
       /* If this was the last pellet */
       if (playerList.get(i).pelletsEaten == 173)
@@ -677,10 +711,10 @@ public class Board extends JPanel
         /*Demo mode can't get a high score */
         if (!demo)
         {
-          if (currScore > highScore)
-          {
-            updateScore(currScore);
-          }
+//          if (currScore > highScore)
+//          {
+//            updateScore(currScore);
+//          }
           winScreen = true;
         }
         else
