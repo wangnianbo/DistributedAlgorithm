@@ -54,7 +54,7 @@ public class RaftMulticastMessage extends SimpleMulticastMessage {
 				return jsonMsgString;
 			}
 			try {
-				Thread.sleep(20);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -86,6 +86,7 @@ public class RaftMulticastMessage extends SimpleMulticastMessage {
 			
 
 			node.msg = keycode + " " + localPlayerID;
+			System.out.println(node.msg);
 		}
 		return true;
 	}
