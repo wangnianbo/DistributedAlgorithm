@@ -25,6 +25,8 @@ public class MessageListener extends Thread {
 		while (true) {
 			msgQueue.add(messageReceiver.backMessage());
 		}
+
+		//
 	}
 
 }
