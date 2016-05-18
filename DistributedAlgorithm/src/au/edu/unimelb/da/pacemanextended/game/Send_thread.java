@@ -62,7 +62,7 @@ label:			if (node.phase == 2){
 					case 0:
 						synchronized(this.node){
 						if(!node.msg.equals("")){
-							msg = "Message "+ node.msg + " "+timestamp+" false";
+							msg = "Message "+ node.msg + " "+ System.currentTimeMillis()+" false";
 							
 							// package into jason
 							encode = new Encoding(msg);
@@ -79,7 +79,7 @@ label:			if (node.phase == 2){
 					case 2:
 						synchronized(this.node){
 						if(!node.msg.equals("")){
-							msg = "Message "+ node.msg + " "+timestamp+" false";
+							msg = "Message "+ node.msg + " "+ System.currentTimeMillis()+" false";
 							
 							// package into jason
 							encode = new Encoding(msg);

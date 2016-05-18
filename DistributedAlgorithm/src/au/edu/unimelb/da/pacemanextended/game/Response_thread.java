@@ -57,7 +57,7 @@ public class Response_thread extends Thread {
 				synchronized (node){
 				if(node.state == 1)
 					node.voteCount++;			
-				if(node.voteCount == 2) //agree number
+				if(node.voteCount == messageReceiver.getServerSocketList().size()) //agree number
 					{
 					node.state = 0;
 					node.phase = 2;
@@ -111,5 +111,10 @@ public class Response_thread extends Thread {
 			
 		}
 		}
+	}
+	public static void main(String[] args){
+//		String msg = "{\"KeyCode\":32,"PlayerID":"player3"}";
+//		Decoding decode = new Decoding(msg);
+//		String[] decodMsg = new String[decode.decode().length];
 	}
 }

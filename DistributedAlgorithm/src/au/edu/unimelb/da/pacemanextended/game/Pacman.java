@@ -51,7 +51,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		gamePlat = new GamePlat();
 		
 		b = new Board(GamePlat.playerNumber, gamePlat.localPlayerID, playersInitialPos);
-		messageListener = new MessageListener(gamePlat.messageReceiver);
+		messageListener = new MessageListener(gamePlat.messageCenter);
 		messageListener.start();
 		b.requestFocus();
 
@@ -313,7 +313,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		jsonObject.put("PlayerID", gamePlat.localPlayerID);
 		jsonObject.put("KeyCode", e.getKeyCode());
 		logger.log(Level.INFO, "JsonMessage: " + jsonObject.toJSONString());
-		gamePlat.messageSender.putMessage(jsonObject.toJSONString());
+		gamePlat.messageCenter.putMessage(jsonObject.toJSONString());
 		// handleControlMessage(e.getKeyCode());
 
 	}

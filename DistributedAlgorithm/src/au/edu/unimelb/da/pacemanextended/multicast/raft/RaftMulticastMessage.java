@@ -43,7 +43,7 @@ public class RaftMulticastMessage extends SimpleMulticastMessage {
 
 				
 			}
-			if("".equals(rsult)){
+			if(!"".equals(rsult)){
 				String[] words = rsult.split(" ");
 				JSONObject jsonObject1 = new JSONObject();
 			
@@ -54,7 +54,7 @@ public class RaftMulticastMessage extends SimpleMulticastMessage {
 				return jsonMsgString;
 			}
 			try {
-				Thread.sleep(5);
+				Thread.sleep(20);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -79,7 +79,7 @@ public class RaftMulticastMessage extends SimpleMulticastMessage {
 				e.printStackTrace();
 			}
 
-			String keycode = (String) jsonObject.get("KeyCode");
+			String keycode = Long.toString((long) jsonObject.get("KeyCode"));
 			
 			
 			String localPlayerID = (String) jsonObject.get("PlayerID");
