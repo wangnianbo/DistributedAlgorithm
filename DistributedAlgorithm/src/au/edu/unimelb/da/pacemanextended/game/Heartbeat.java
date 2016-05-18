@@ -1,17 +1,21 @@
 package au.edu.unimelb.da.pacemanextended.game;
 
+import au.edu.unimelb.da.pacemanextended.multicast.MessageReceiver;
+import au.edu.unimelb.da.pacemanextended.multicast.MessageSender;
 import au.edu.unimelb.da.pacemanextended.plat.GamePlat;
 
 public class Heartbeat extends Thread {
 	
 	private Node node;
-	private GamePlat gamePlat;
 	private String msg;
 	private Encoding encode;
-	
-	public Heartbeat (GamePlat gamePlat){
-		this.gamePlat = gamePlat;
-		this.node = gamePlat.node;
+	MessageReceiver messageReceiver;
+	MessageSender messageSender;
+	public Heartbeat (Node node, MessageReceiver messageReceiver,
+			MessageSender messageSender) {
+		this.node = node;
+		this.messageReceiver = messageReceiver;
+		this.messageSender = messageSender;
 	}
 	
 	public void run(){
@@ -26,7 +30,7 @@ public class Heartbeat extends Thread {
 			msg = "Heartbeat";
 			encode = new Encoding(msg);
 			msg = encode.encode();
-			gamePlat.messageSender.sendOtherMessage(gamePlat.messageSender.getPlayerID(),msg);
+			messageSender.sendOtherMessage(messageSender.getPlayerID(),msg);
 			System.out.println("Send: "+msg);
 			msg="";
 			
@@ -47,7 +51,7 @@ public class Heartbeat extends Thread {
 					// package into jason
 					encode = new Encoding(msg);
 					msg = encode.encode();
-					gamePlat.messageSender.putMessage(msg);
+					messageSender.putMessage(msg);
 					System.out.println("Send: "+msg);
 					msg="";
 					}

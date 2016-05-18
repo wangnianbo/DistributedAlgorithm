@@ -1,13 +1,20 @@
 package au.edu.unimelb.da.pacemanextended.game;
+import au.edu.unimelb.da.pacemanextended.multicast.MessageReceiver;
+import au.edu.unimelb.da.pacemanextended.multicast.MessageSender;
 import au.edu.unimelb.da.pacemanextended.plat.GamePlat;
 
 public class Time_out extends Thread {
 	
     private Node node;
     
-    public Time_out(GamePlat gamePlat){
-    	this.node = gamePlat.node;
-    }
+    MessageReceiver messageReceiver;
+	MessageSender messageSender;
+	public Time_out (Node node, MessageReceiver messageReceiver,
+			MessageSender messageSender) {
+		this.node = node;
+		this.messageReceiver = messageReceiver;
+		this.messageSender = messageSender;
+	}
     
 	public synchronized void run() {
 		while (true) {

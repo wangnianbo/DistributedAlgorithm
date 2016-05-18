@@ -20,6 +20,8 @@ public abstract class MessageSender{
 	public abstract boolean putMessage(String jsonMsg);
 	
 	public abstract boolean putMessage(String playerID, String jsonMsg);
+	
+	public abstract boolean sendOtherMessage(String playerID, String jsonMsg);
 
 	public String getPlayerID() {
 		return playerID;

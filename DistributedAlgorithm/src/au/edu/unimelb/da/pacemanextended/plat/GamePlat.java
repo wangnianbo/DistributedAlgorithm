@@ -1,5 +1,4 @@
 package au.edu.unimelb.da.pacemanextended.plat;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -16,9 +15,12 @@ import au.edu.unimelb.da.pacemanextended.game.Time_out;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageCenter;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageReceiver;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageSender;
+import au.edu.unimelb.da.pacemanextended.multicast.raft.RaftMulticastMessage;
 import au.edu.unimelb.da.pacemanextended.multicast.simple.SimpleMulticastMessage;
 import au.edu.unimelb.da.pacemanextended.multicast.simple.SimpleMulticastMessageReceiver;
 import au.edu.unimelb.da.pacemanextended.multicast.simple.SimpleMulticastMessageSender;
+
+
 
 public class GamePlat {
 
@@ -37,7 +39,7 @@ public class GamePlat {
 	
 	public String localPlayerID;
 	
-	public Node node= new Node();
+	
 
 	public GamePlat() {
 
@@ -148,7 +150,7 @@ public class GamePlat {
 		messageReceiver = new SimpleMulticastMessageReceiver(localPlayerID,
 				severSocketList.getServerSocketList());
 		
-		messageCenter = new SimpleMulticastMessage(messageReceiver, messageSender);
+		messageCenter = new RaftMulticastMessage (messageReceiver, messageSender);
 		
 		return localPlayerID;
 
@@ -157,14 +159,6 @@ public class GamePlat {
 	public static void main(String[] args) {
 		GamePlat gamePlat = new GamePlat();
 		
-		Response_thread response = new Response_thread(gamePlat);
-		Send_thread send = new Send_thread(gamePlat);
-		Time_out time = new Time_out(gamePlat);
-		
-		response.start();
-		send.start();
-		time.start();
-
 	}
 
 }

@@ -18,8 +18,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import au.edu.unimelb.da.pacemanextended.multicast.MessageReceiver;
-import au.edu.unimelb.da.pacemanextended.multicast.MessageSender;
 import au.edu.unimelb.da.pacemanextended.plat.GamePlat;
 
 /* This class contains the entire game... most of the game logic is in the Board class but this
@@ -28,7 +26,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 
 	/*
 	 * These timers are used to kill title, game over, and victory screens after
-	 * a set idle period (5 seconds)
+	 * a set idle period (5 seconds) 
 	 */
 	long titleTimer = -1;
 	long timer = -1;
@@ -90,7 +88,6 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 						jsonObject = (JSONObject) jsonParser
 								.parse(jsonMsgString);
 					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					handleControlMessage(jsonObject);
@@ -105,7 +102,6 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -116,9 +112,6 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		b.titleScreen = false;
 		b.requestFocus();
 		
-		
-		
-
 	}
 
 	/*
@@ -311,7 +304,6 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			
@@ -321,11 +313,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		jsonObject.put("PlayerID", gamePlat.localPlayerID);
 		jsonObject.put("KeyCode", e.getKeyCode());
 		logger.log(Level.INFO, "JsonMessage: " + jsonObject.toJSONString());
-		synchronized(gamePlat){
-			gamePlat.node.msg = e.getKeyCode()+" "+gamePlat.localPlayerID;
-			System.out.println(jsonObject.toJSONString()+"%%%");
-		}
-		
+		gamePlat.messageSender.putMessage(jsonObject.toJSONString());
 		// handleControlMessage(e.getKeyCode());
 
 	}

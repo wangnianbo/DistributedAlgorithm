@@ -2,27 +2,32 @@ package au.edu.unimelb.da.pacemanextended.game;
 
 import org.json.simple.parser.ParseException;
 
+import au.edu.unimelb.da.pacemanextended.multicast.MessageReceiver;
+import au.edu.unimelb.da.pacemanextended.multicast.MessageSender;
 import au.edu.unimelb.da.pacemanextended.plat.GamePlat;
 
 public class Response_thread extends Thread {
 
 	private String msg;
 	private Node node;
-	private GamePlat gamePlat;
 	private Encoding encode;
 	private Decoding decode;
+	MessageReceiver messageReceiver;
+	MessageSender messageSender;
 
-	public Response_thread(GamePlat gamePlat) {
 
-		this.gamePlat = gamePlat;
-		this.node = gamePlat.node;
+	public Response_thread(Node node, MessageReceiver messageReceiver,
+			MessageSender messageSender) {
+		this.node = node;
+		this.messageReceiver = messageReceiver;
+		this.messageSender = messageSender;
 	}
 
 	public void run() {
 		while (true) {
 			
 			try{
-			msg = gamePlat.messageReceiver.backMessage();
+			msg = messageReceiver.backMessage();
 			System.out.println("Receive: "+msg);
 			decode = new Decoding(msg);
 			String[] decodMsg = new String[decode.decode().length];
@@ -43,7 +48,7 @@ public class Response_thread extends Thread {
 					msg = encode.encode();
 					node.notifyAll();
 				}
-				gamePlat.messageSender.sendOtherMessage(gamePlat.messageSender.getPlayerID(),msg);
+				messageSender.sendOtherMessage(messageSender.getPlayerID(),msg);
 				System.out.println("Send: "+msg);
 				msg ="";
 				break;
@@ -60,11 +65,12 @@ public class Response_thread extends Thread {
 					msg = "Heartbeat";
 					encode = new Encoding(msg);
 					msg = encode.encode();
-					gamePlat.messageSender.sendOtherMessage(gamePlat.messageSender.getPlayerID(),msg);
+					messageSender.sendOtherMessage(messageSender.getPlayerID(),msg);
 					System.out.println("Send: "+msg);
 					msg ="";
 					
-					Heartbeat t = new Heartbeat(gamePlat);
+					Heartbeat t = new Heartbeat( node,  messageReceiver,
+							 messageSender);
 					t.start();
 					}
 				}
@@ -81,7 +87,7 @@ public class Response_thread extends Thread {
 				if(decodMsg[3].equals("true")){
 					// give back the value
 					synchronized(node){
-						gamePlat.node.backMsg = decodMsg[1];
+						node.backMsg = decodMsg[1];
 						System.out.println("result: "+decodMsg[1]);
 					}
 				}

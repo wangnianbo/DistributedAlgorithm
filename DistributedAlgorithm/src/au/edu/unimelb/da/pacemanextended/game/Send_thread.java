@@ -3,19 +3,23 @@ package au.edu.unimelb.da.pacemanextended.game;
 
 import java.util.Random;
 
+import au.edu.unimelb.da.pacemanextended.multicast.MessageReceiver;
+import au.edu.unimelb.da.pacemanextended.multicast.MessageSender;
 import au.edu.unimelb.da.pacemanextended.plat.GamePlat;
 
 public class Send_thread extends Thread {
 
 	private String msg = "";
 	private Node node;
-	private GamePlat gamePlat;
 	private Encoding encode;
+	MessageReceiver messageReceiver;
+	MessageSender messageSender;
 
-	public Send_thread(GamePlat gamePlat) {
-
-		this.gamePlat = gamePlat;
-		this.node = gamePlat.node;
+	public Send_thread(Node node, MessageReceiver messageReceiver,
+			MessageSender messageSender) {
+		this.node = node;
+		this.messageReceiver = messageReceiver;
+		this.messageSender = messageSender;
 	}
 
 	public void run() {
@@ -42,7 +46,7 @@ public class Send_thread extends Thread {
 						msg = "Request Vote";
 						encode = new Encoding(msg);
 						msg = encode.encode();
-						gamePlat.messageSender.sendOtherMessage(gamePlat.messageSender.getPlayerID(),msg); //request vote
+						messageSender.sendOtherMessage(messageSender.getPlayerID(),msg); //request vote
 						//System.out.println(node.term+" "+node.phase+" "+node.state);
 						System.out.println("Send: "+msg);
 						msg = "";
@@ -63,7 +67,7 @@ label:			if (node.phase == 2){
 							// package into jason
 							encode = new Encoding(msg);
 							msg = encode.encode();
-							gamePlat.messageSender.putMessage(msg);
+							messageSender.putMessage(msg);
 							System.out.println("Send: "+msg);
 							node.msg = "";
 						}
@@ -80,7 +84,7 @@ label:			if (node.phase == 2){
 							// package into jason
 							encode = new Encoding(msg);
 							msg = encode.encode();
-							gamePlat.messageSender.putMessage(msg);
+							messageSender.putMessage(msg);
 							System.out.println("Send: "+msg);
 							node.msg = "";
 						}
