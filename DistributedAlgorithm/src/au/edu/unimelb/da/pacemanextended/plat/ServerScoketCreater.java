@@ -20,6 +20,12 @@ public class ServerScoketCreater extends Thread{
 	
 	
 
+	/**
+	 * Create socket connections
+	 * @param port
+	 * @param playerNo
+	 * @param severSocketList
+	 */
 	public ServerScoketCreater(int port, int playerNo, SeverSocketList severSocketList) {
 		this.port = port;
 		this.playerNo = playerNo;

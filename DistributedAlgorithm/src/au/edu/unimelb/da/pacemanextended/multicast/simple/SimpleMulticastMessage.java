@@ -4,6 +4,11 @@ import au.edu.unimelb.da.pacemanextended.multicast.MessageCenter;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageReceiver;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageSender;
 
+/**
+ * Simple Multicast message
+ * @author Bill
+ *
+ */
 public class SimpleMulticastMessage extends MessageCenter{
 
 	public SimpleMulticastMessage(MessageReceiver messageReceiver,

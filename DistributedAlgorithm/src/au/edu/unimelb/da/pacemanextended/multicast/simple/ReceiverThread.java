@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+/**
+ * Message Receiver
+ * @author Bill
+ *
+ */
 public class ReceiverThread extends Thread {
 
 	private int playerId;
