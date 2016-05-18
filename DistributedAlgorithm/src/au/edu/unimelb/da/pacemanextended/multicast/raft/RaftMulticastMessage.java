@@ -86,7 +86,6 @@ public class RaftMulticastMessage extends SimpleMulticastMessage {
 			
 
 			node.msg = keycode + " " + localPlayerID;
-			System.out.println(node.msg);
 		}
 		return true;
 	}
