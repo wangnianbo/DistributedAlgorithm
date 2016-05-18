@@ -8,10 +8,19 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JApplet;
 import javax.swing.JFrame;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import au.edu.unimelb.da.pacemanextended.multicast.MessageReceiver;
+import au.edu.unimelb.da.pacemanextended.multicast.MessageSender;
+import au.edu.unimelb.da.pacemanextended.plat.GamePlat;
 
 /* This class contains the entire game... most of the game logic is in the Board class but this
  creates the gui and captures mouse and keyboard input, as well as controls the game states */
@@ -23,17 +32,28 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 	 */
 	long titleTimer = -1;
 	long timer = -1;
+	
+	int[][] playersInitialPos = {{20,20},{380,20},{380,380},{20,380}};
+
 
 	final static Logger logger = Logger.getLogger(Pacman.class.getName());
 
 	/* Create a new board */
-	Board b = new Board();
+	Board b ;
 
 	/* This timer is used to do request new frames be drawn */
 	javax.swing.Timer frameTimer;
 
+	GamePlat gamePlat;
+	MessageListener messageListener;
+
 	/* This constructor creates the entire game essentially */
 	public Pacman() {
+		gamePlat = new GamePlat();
+		
+		b = new Board(GamePlat.playerNumber, gamePlat.localPlayerID, playersInitialPos);
+		messageListener = new MessageListener(gamePlat.messageReceiver);
+		messageListener.start();
 		b.requestFocus();
 
 		/* Create and set up window frame */
@@ -58,15 +78,30 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		stepFrame(true);
 
 		/* Create a timer that calls stepFrame every 30 milliseconds */
-//		frameTimer = new javax.swing.Timer(30, new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				stepFrame(false);
-//			}
-//		});
+		frameTimer = new javax.swing.Timer(30, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// stepFrame(false);
+				if (messageListener.hasMsg()) {
+					String jsonMsgString = messageListener.getMsg();
+					JSONParser jsonParser = new JSONParser();
+					JSONObject jsonObject = null;
+					try {
+						jsonObject = (JSONObject) jsonParser
+								.parse(jsonMsgString);
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					handleControlMessage(jsonObject);
+				}
+
+			}
+		});
 
 		/* Start the timer */
-//		frameTimer.start();
+		frameTimer.start();
 
+	
 		b.requestFocus();
 
 		try {
@@ -76,6 +111,9 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		}
 		// directly start the game
 		b.titleScreen = false;
+		
+		
+
 	}
 
 	/*
@@ -84,17 +122,27 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 	 */
 	@Override
 	public void repaint() {
-		if (b.player.teleport) {
-			b.repaint(b.player.lastX - 20, b.player.lastY - 20, 80, 80);
-			b.player.teleport = false;
+		for (int i = 0; i < GamePlat.playerNumber; i++) {
+			if (b.playerList.get(i).teleport) {
+				b.repaint(b.playerList.get(i).lastX - 20, b.playerList.get(i).lastY - 20, 80, 80);
+				b.playerList.get(i).teleport = false;
+			}
+			
 		}
+		
+		for (int i = 0; i < GamePlat.playerNumber; i++) {
+			b.repaint(b.playerList.get(i).x - 20, b.playerList.get(i).y - 20, 80, 80);
+		}
+		
 		b.repaint(0, 0, 600, 20);
 		b.repaint(0, 420, 600, 40);
-		b.repaint(b.player.x - 20, b.player.y - 20, 80, 80);
+		
 		b.repaint(b.ghost1.x - 20, b.ghost1.y - 20, 80, 80);
 		b.repaint(b.ghost2.x - 20, b.ghost2.y - 20, 80, 80);
 		b.repaint(b.ghost3.x - 20, b.ghost3.y - 20, 80, 80);
 		b.repaint(b.ghost4.x - 20, b.ghost4.y - 20, 80, 80);
+		
+//		logger.log(Level.INFO,"player.x: "+b.player.x+" player.y: "+b.player.y);
 	}
 
 	/* Steps the screen forward one frame */
@@ -174,18 +222,21 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 			 * mode and move if we're in user playable mode. Call the
 			 * appropriate one here
 			 */
-			if (b.demo) {
-				b.player.demoMove();
-			} else {
-				b.player.move();
+			for (int i = 0; i < GamePlat.playerNumber; i++) {
+				if (b.demo) {
+					b.playerList.get(i).demoMove();
+				} else {
+					b.playerList.get(i).move();
+				}
+				b.playerList.get(i).updatePellet();
 			}
-
+			
 			/* Also move the ghosts, and update the pellet states */
 			b.ghost1.move();
 			b.ghost2.move();
 			b.ghost3.move();
 			b.ghost4.move();
-			b.player.updatePellet();
+			
 			b.ghost1.updatePellet();
 			b.ghost2.updatePellet();
 			b.ghost3.updatePellet();
@@ -198,7 +249,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		 */
 		if (b.stopped || New) {
 			/* Temporarily stop advancing frames */
-//			frameTimer.stop();
+			// frameTimer.stop();
 
 			/* If user is dying ... */
 			while (b.dying > 0) {
@@ -210,11 +261,14 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 			 * Move all game elements back to starting positions and
 			 * orientations
 			 */
-			b.player.currDirection = 'L';
-			b.player.direction = 'L';
-			b.player.desiredDirection = 'L';
-			b.player.x = 200;
-			b.player.y = 300;
+			for (int i = 0; i < GamePlat.playerNumber; i++) {
+				b.playerList.get(i).currDirection = 'L';
+				b.playerList.get(i).direction = 'L';
+				b.playerList.get(i).desiredDirection = 'L';
+				b.playerList.get(i).x = playersInitialPos[i][0];
+				b.playerList.get(i).y = playersInitialPos[i][0];
+			}
+		
 			b.ghost1.x = 180;
 			b.ghost1.y = 180;
 			b.ghost2.x = 200;
@@ -228,8 +282,8 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 			b.repaint(0, 0, 600, 600);
 
 			/* Start advancing frames once again */
-//			b.stopped = false;
-//			frameTimer.start();
+			// b.stopped = false;
+			// frameTimer.start();
 		}
 		/* Otherwise we're in a normal state, advance one frame */
 		else {
@@ -239,7 +293,28 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 
 	/* Handles user key presses */
 	public void keyPressed(KeyEvent e) {
+		logger.log(Level.INFO, "KeyCode: " + e.getKeyCode());
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("PlayerID", gamePlat.localPlayerID);
+		jsonObject.put("KeyCode", e.getKeyCode());
+		logger.log(Level.INFO, "JsonMessage: " + jsonObject.toJSONString());
+		gamePlat.messageSender.putMessage(jsonObject.toJSONString());
+		// handleControlMessage(e.getKeyCode());
 
+	}
+
+	private void handleControlMessage(JSONObject msgJson) {
+
+		logger.log(Level.INFO, "handleControlMessage--PlayerID: "+msgJson.get("PlayerID")
+				+" keyCode: "	+msgJson.get("KeyCode")
+				+" titleScreen: "	+b.titleScreen
+				+" winScreen: "	+b.winScreen
+				+" overScreen: "	+b.overScreen
+				);
+		int keycode = ((Long) msgJson.get("KeyCode")).intValue();
+		String msgFrom = (String) msgJson.get("PlayerID");
+		int msgFromPlayIDint = Integer.parseInt(msgFrom.substring("player".length())) -1;
+		
 		/* Pressing a key in the title screen starts a game */
 		if (b.titleScreen) {
 			b.titleScreen = false;
@@ -268,22 +343,25 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		}
 
 		/* Otherwise, key presses control the player! */
-		switch (e.getKeyCode()) {
+	
+		
+		switch (keycode) {
 		case KeyEvent.VK_LEFT:
-			b.player.desiredDirection = 'L';
+			b.playerList.get(msgFromPlayIDint).desiredDirection = 'L';
 			break;
 		case KeyEvent.VK_RIGHT:
-			b.player.desiredDirection = 'R';
+			b.playerList.get(msgFromPlayIDint).desiredDirection = 'R';
 			break;
 		case KeyEvent.VK_UP:
-			b.player.desiredDirection = 'U';
+			b.playerList.get(msgFromPlayIDint).desiredDirection = 'U';
 			break;
 		case KeyEvent.VK_DOWN:
-			b.player.desiredDirection = 'D';
+			b.playerList.get(msgFromPlayIDint).desiredDirection = 'D';
 			break;
 		}
 		stepFrame(false);
 		repaint();
+		
 	}
 
 	/*
@@ -333,7 +411,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 
 	/* Main function simply creates a new pacman instance */
 	public static void main(String[] args) {
-		
+
 		Pacman c = new Pacman();
 	}
 }

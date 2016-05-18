@@ -1,8 +1,6 @@
 package au.edu.unimelb.da.pacemanextended.plat;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.HashMap;
@@ -21,75 +19,88 @@ public class GamePlat {
 	private static final Logger logger = Logger.getLogger(GamePlat.class
 			.getName());
 
-	public static final int playerNumber = 4;
+	public static final int playerNumber = 1;
+	
+	String[] addressArray = {"localhost:40001","localhost:40002","localhost:40003","localhost:40004"};
 
 	public MessageReceiver messageReceiver;
 
 	public MessageSender messageSender;
+	
+	public String localPlayerID;
 
-	public static void main(String[] args) {
+	public GamePlat() {
 
 		Properties prop = new Properties();
-		InputStream input = null;
-		Map urlMap = new HashMap<String, String>();
+		Map<String, String> urlMap = new HashMap<String, String>();
 
-		try {
+//		try {
+//
+//			input = new FileInputStream("./resources/config/config.properties");
+//
+//			prop.load(input);
+//			for (int i = 0; i < playerNumber; i++) {
+//				logger.log(Level.INFO, prop.getProperty("player" + (1 + i)));
+//				urlMap.put("player" + (1 + i),
+//						prop.getProperty("player" + (1 + i)));
+//			}
+//
+//			// save properties to project root folder
+//
+//		} catch (IOException ex) {
+//			ex.printStackTrace();
+//		} finally {
+//			if (input != null) {
+//				try {
+//					input.close();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
 
-			input = new FileInputStream("./resources/config/config.properties");
-
-			prop.load(input);
-			for (int i = 0; i < playerNumber; i++) {
-				logger.log(Level.INFO, prop.getProperty("player" + (1 + i)));
-				urlMap.put("player" + (1 + i),
-						prop.getProperty("player" + (1 + i)));
-			}
-
-			// save properties to project root folder
-
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+		
+		for (int i = 0; i < playerNumber; i++) {
+			logger.log(Level.INFO, prop.getProperty("player" + (1 + i)));
+			urlMap.put("player" + (1 + i),addressArray[i]);
 		}
-		GamePlat gamePlat = new GamePlat();
-		gamePlat.setNetworkConnection(urlMap);
+		localPlayerID = setNetworkConnection(urlMap);
 		logger.log(Level.INFO, "Finish Establish Connection");
 		// multicast Test Player1 Sending message and others receive
+		
+		
+		
 
-		if (gamePlat.messageSender.getPlayerID().equals("player1")) {
-			int count =0;
-			while (true) {
-				 
-				gamePlat.messageSender.putMessage("player1 Sending Message: "+ ++count);
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-		} else {
-			while (true) {
-					System.out.println(gamePlat.messageSender.getPlayerID()+" getting Message:  " + gamePlat.messageReceiver.backMessage());
-				try {
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
+//		if (gamePlat.messageSender.getPlayerID().equals("player1")) {
+//			int count =0;
+//			while (true) {
+//				 
+//				gamePlat.messageSender.putMessage("player1 Sending Message: "+ ++count);
+//				try {
+//					Thread.sleep(1000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//
+//			}
+//		} else {
+//			while (true) {
+//					System.out.println(gamePlat.messageSender.getPlayerID()+" getting Message:  " + gamePlat.messageReceiver.backMessage());
+//				try {
+//					Thread.sleep(1);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//		}
 
 	}
 
-	private void setNetworkConnection(Map<String, String> urlMap) {
+
+
+	private String setNetworkConnection(Map<String, String> urlMap) {
 		String localPlayerID = null;
 		Map<String, Socket> senderSocketMap = new HashMap<String, Socket>();
 		SeverSocketList severSocketList = new SeverSocketList();
@@ -126,7 +137,13 @@ public class GamePlat {
 		 senderSocketMap);
 		messageReceiver = new SimpleMulticastMessageReceiver(localPlayerID,
 				severSocketList.getServerSocketList());
+		
+		return localPlayerID;
 
+	}
+	
+	public static void main(String[] args) {
+		GamePlat gamePlat = new GamePlat();
 	}
 
 }

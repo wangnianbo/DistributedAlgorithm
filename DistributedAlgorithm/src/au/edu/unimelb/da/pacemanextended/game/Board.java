@@ -1,11 +1,20 @@
 /* Drew Schuster */
 package au.edu.unimelb.da.pacemanextended.game;
-import java.awt.*;
-import javax.imageio.*;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 import javax.swing.JPanel;
-import java.lang.Math;
-import java.util.*;
-import java.io.*;
+
+import au.edu.unimelb.da.pacemanextended.plat.GamePlat;
 
 
 
@@ -51,8 +60,12 @@ public class Board extends JPanel
   Image gameOverImage = Toolkit.getDefaultToolkit().getImage("img/gameOver.jpg"); 
   Image winScreenImage = Toolkit.getDefaultToolkit().getImage("img/winScreen.jpg");
 
+  int numberOfPlayers;
+  String localPlayerID;
+  int[][] playersInitialPos;
   /* Initialize the player and ghosts */
-  Player player = new Player(200,300);
+//  Player player = new Player(20,20);
+  List <Player> playerList = new ArrayList<Player>();
   Ghost ghost1 = new Ghost(180,180);
   Ghost ghost2 = new Ghost(200,180);
   Ghost ghost3 = new Ghost(220,180);
@@ -102,8 +115,14 @@ public class Board extends JPanel
   Font font = new Font("Monospaced",Font.BOLD, 12);
 
   /* Constructor initializes state flags etc.*/
-  public Board() 
+  public Board(int numberOfPlayers, String localPlayerID,int[][]  playersInitialPos) 
   {
+	  this.numberOfPlayers = numberOfPlayers;
+	  this.localPlayerID = localPlayerID;
+	  this.playersInitialPos = playersInitialPos;
+	  for (int i = 0; i < numberOfPlayers; i++) {
+		playerList.add(new Player(playersInitialPos[i][0], playersInitialPos[i][1]));
+	}
     initHighScores();
     sounds = new GameSounds();
     currScore=0;
@@ -381,20 +400,24 @@ public class Board extends JPanel
       sounds.nomNomStop();
 
       /* Draw the pacman */
-      g.drawImage(pacmanImage,player.x,player.y,Color.BLACK,null);
+//      g.drawImage(pacmanImage,player.x,player.y,Color.BLACK,null);
+      for (int i = 0; i < numberOfPlayers; i++) {
+    	  g.drawImage(pacmanImage,playerList.get(i).x,playerList.get(i).y,Color.BLACK,null);
+	}
+      
       g.setColor(Color.BLACK);
       
       /* Kill the pacman */
-      if (dying == 4)
-        g.fillRect(player.x,player.y,20,7);
-      else if ( dying == 3)
-        g.fillRect(player.x,player.y,20,14);
-      else if ( dying == 2)
-        g.fillRect(player.x,player.y,20,20); 
-      else if ( dying == 1)
-      {
-        g.fillRect(player.x,player.y,20,20); 
-      }
+//      if (dying == 4)
+//        g.fillRect(player.x,player.y,20,7);
+//      else if ( dying == 3)
+//        g.fillRect(player.x,player.y,20,14);
+//      else if ( dying == 2)
+//        g.fillRect(player.x,player.y,20,20); 
+//      else if ( dying == 1)
+//      {
+//        g.fillRect(player.x,player.y,20,20); 
+//      }
      
       /* Take .1 seconds on each frame of death, and then take 2 seconds
          for the final frame to allow for the sound effect to end */ 
@@ -490,7 +513,11 @@ public class Board extends JPanel
     if (New==1)
     {
       reset();
-      player = new Player(200,300);
+//      player = new Player(20,20);
+      playerList = new ArrayList<Player>();
+      for (int i = 0; i < numberOfPlayers; i++) {
+  		playerList.add(new Player(playersInitialPos[i][0], playersInitialPos[i][1]));
+  	}
       ghost1 = new Ghost(180,180);
       ghost2 = new Ghost(200,180);
       ghost3 = new Ghost(220,180);
@@ -500,9 +527,18 @@ public class Board extends JPanel
       drawPellets(g);
       drawLives(g);
       /* Send the game map to player and all ghosts */
-      player.updateState(state);
+//      player.updateState(state);
+      for (int i = 0; i < numberOfPlayers; i++) {
+    		playerList.get(i).updateState(state);
+    	}
+      
       /* Don't let the player go in the ghost box*/
-      player.state[9][7]=false; 
+//      player.state[9][7]=false; 
+      
+      for (int i = 0; i < numberOfPlayers; i++) {
+  		playerList.get(i).state[9][7]=false; 
+  	}
+      
       ghost1.updateState(state);
       ghost2.updateState(state);
       ghost3.updateState(state);
@@ -545,7 +581,12 @@ public class Board extends JPanel
     }
     
     /* Drawing optimization */
-    g.copyArea(player.x-20,player.y-20,80,80,0,0);
+   
+    
+    for (int i = 0; i < numberOfPlayers; i++) {
+  		 g.copyArea(playerList.get(i).x-20,playerList.get(i).y-20,80,80,0,0);
+  	}
+    
     g.copyArea(ghost1.x-20,ghost1.y-20,80,80,0,0);
     g.copyArea(ghost2.x-20,ghost2.y-20,80,80,0,0);
     g.copyArea(ghost3.x-20,ghost3.y-20,80,80,0,0);
@@ -554,22 +595,22 @@ public class Board extends JPanel
 
 
     /* Detect collisions */
-    if (player.x == ghost1.x && Math.abs(player.y-ghost1.y) < 10)
-      oops=true;
-    else if (player.x == ghost2.x && Math.abs(player.y-ghost2.y) < 10)
-      oops=true;
-    else if (player.x == ghost3.x && Math.abs(player.y-ghost3.y) < 10)
-      oops=true;
-    else if (player.x == ghost4.x && Math.abs(player.y-ghost4.y) < 10)
-      oops=true;
-    else if (player.y == ghost1.y && Math.abs(player.x-ghost1.x) < 10)
-      oops=true;
-    else if (player.y == ghost2.y && Math.abs(player.x-ghost2.x) < 10)
-      oops=true;
-    else if (player.y == ghost3.y && Math.abs(player.x-ghost3.x) < 10)
-      oops=true;
-    else if (player.y == ghost4.y && Math.abs(player.x-ghost4.x) < 10)
-      oops=true;
+//    if (player.x == ghost1.x && Math.abs(player.y-ghost1.y) < 10)
+//      oops=true;
+//    else if (player.x == ghost2.x && Math.abs(player.y-ghost2.y) < 10)
+//      oops=true;
+//    else if (player.x == ghost3.x && Math.abs(player.y-ghost3.y) < 10)
+//      oops=true;
+//    else if (player.x == ghost4.x && Math.abs(player.y-ghost4.y) < 10)
+//      oops=true;
+//    else if (player.y == ghost1.y && Math.abs(player.x-ghost1.x) < 10)
+//      oops=true;
+//    else if (player.y == ghost2.y && Math.abs(player.x-ghost2.x) < 10)
+//      oops=true;
+//    else if (player.y == ghost3.y && Math.abs(player.x-ghost3.x) < 10)
+//      oops=true;
+//    else if (player.y == ghost4.y && Math.abs(player.x-ghost4.x) < 10)
+//      oops=true;
 
     /* Kill the pacman */
     if (oops && !stopped)
@@ -591,26 +632,31 @@ public class Board extends JPanel
 
     /* Delete the players and ghosts */
     g.setColor(Color.BLACK);
-    g.fillRect(player.lastX,player.lastY,20,20);
+//    g.fillRect(player.lastX,player.lastY,20,20);
+    for (int i = 0; i < GamePlat.playerNumber; i++) {
+    	g.fillRect(playerList.get(i).lastX,playerList.get(i).lastY,20,20);
+	}
+    
     g.fillRect(ghost1.lastX,ghost1.lastY,20,20);
     g.fillRect(ghost2.lastX,ghost2.lastY,20,20);
     g.fillRect(ghost3.lastX,ghost3.lastY,20,20);
     g.fillRect(ghost4.lastX,ghost4.lastY,20,20);
 
     /* Eat pellets */
-    if ( pellets[player.pelletX][player.pelletY] && New!=2 && New !=3)
+    for (int i = 0; i < numberOfPlayers; i++) {
+    if ( pellets[playerList.get(i).pelletX][playerList.get(i).pelletY] && New!=2 && New !=3)
     {
-      lastPelletEatenX = player.pelletX;
-      lastPelletEatenY = player.pelletY;
+      lastPelletEatenX = playerList.get(i).pelletX;
+      lastPelletEatenY = playerList.get(i).pelletY;
 
       /* Play eating sound */
       sounds.nomNom();
       
       /* Increment pellets eaten value to track for end game */
-      player.pelletsEaten++;
+      playerList.get(i).pelletsEaten++;
 
       /* Delete the pellet*/
-      pellets[player.pelletX][player.pelletY]=false;
+      pellets[playerList.get(i).pelletX][playerList.get(i).pelletY]=false;
 
       /* Increment the score */
       currScore += 50;
@@ -626,7 +672,7 @@ public class Board extends JPanel
         g.drawString("Score: "+(currScore)+"\t High Score: "+highScore,20,10);
 
       /* If this was the last pellet */
-      if (player.pelletsEaten == 173)
+      if (playerList.get(i).pelletsEaten == 173)
       {
         /*Demo mode can't get a high score */
         if (!demo)
@@ -646,12 +692,12 @@ public class Board extends JPanel
     }
 
     /* If we moved to a location without pellets, stop the sounds */
-    else if ( (player.pelletX != lastPelletEatenX || player.pelletY != lastPelletEatenY ) || player.stopped)
+    else if ( (playerList.get(i).pelletX != lastPelletEatenX || playerList.get(i).pelletY != lastPelletEatenY ) || playerList.get(i).stopped)
     {
       /* Stop any pacman eating sounds */
       sounds.nomNomStop();
     }
-
+    }
 
     /* Replace pellets that have been run over by ghosts */
     if ( pellets[ghost1.lastPelletX][ghost1.lastPelletY])
@@ -688,34 +734,35 @@ public class Board extends JPanel
     }
 
     /* Draw the pacman */
-    if (player.frameCount < 5)
+    for (int i = 0; i < numberOfPlayers; i++) {
+    if (playerList.get(i).frameCount < 5)
     {
       /* Draw mouth closed */
-      g.drawImage(pacmanImage,player.x,player.y,Color.BLACK,null);
+      g.drawImage(pacmanImage,playerList.get(i).x,playerList.get(i).y,Color.BLACK,null);
     }
     else
     {
       /* Draw mouth open in appropriate direction */
-      if (player.frameCount >=10)
-        player.frameCount=0;
+      if (playerList.get(i).frameCount >=10)
+        playerList.get(i).frameCount=0;
 
-      switch(player.currDirection)
+      switch(playerList.get(i).currDirection)
       {
         case 'L':
-           g.drawImage(pacmanLeftImage,player.x,player.y,Color.BLACK,null);
+           g.drawImage(pacmanLeftImage,playerList.get(i).x,playerList.get(i).y,Color.BLACK,null);
            break;     
         case 'R':
-           g.drawImage(pacmanRightImage,player.x,player.y,Color.BLACK,null);
+           g.drawImage(pacmanRightImage,playerList.get(i).x,playerList.get(i).y,Color.BLACK,null);
            break;     
         case 'U':
-           g.drawImage(pacmanUpImage,player.x,player.y,Color.BLACK,null);
+           g.drawImage(pacmanUpImage,playerList.get(i).x,playerList.get(i).y,Color.BLACK,null);
            break;     
         case 'D':
-           g.drawImage(pacmanDownImage,player.x,player.y,Color.BLACK,null);
+           g.drawImage(pacmanDownImage,playerList.get(i).x,playerList.get(i).y,Color.BLACK,null);
            break;     
       }
     }
-
+    }
     /* Draw the border around the game in case it was overwritten by ghost movement or something */
     g.setColor(Color.WHITE);
     g.drawRect(19,19,382,382);
