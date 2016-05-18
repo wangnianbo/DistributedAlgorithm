@@ -76,6 +76,7 @@ public class IsisReceivedMessageProcessor extends
                     proposedList.put(uuid, list);
                 }
             }else if (type == 2) {
+                //third message, update hold back queue
                 final int agreeNumber = Integer.parseInt(object.get("atsp").toString());
                 final int promoNumber = Integer.parseInt(object.get("ptsp").toString());
                 this.atsp.settsp(Math.max(atsp.gettsp(), agreeNumber));

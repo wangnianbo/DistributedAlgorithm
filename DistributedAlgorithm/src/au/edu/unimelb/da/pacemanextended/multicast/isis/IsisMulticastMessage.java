@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 import java.util.UUID;
 
 /**
+ * sender class, used to send initial message
  * Created by xy on 5/18/2016.
  */
 public class IsisMulticastMessage extends SimpleMulticastMessage {
@@ -42,6 +43,7 @@ public class IsisMulticastMessage extends SimpleMulticastMessage {
         //return super.messageSender.putMessage(playerID, jsonMsg);
     }
 
+    //package message with json format
     @Override
     public boolean putMessage(String jsonMsg) {
         String uuid = UUID.randomUUID().toString();

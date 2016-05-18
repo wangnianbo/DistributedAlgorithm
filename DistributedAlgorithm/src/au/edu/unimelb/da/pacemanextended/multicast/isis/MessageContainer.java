@@ -7,10 +7,12 @@ import org.json.simple.parser.ParseException;
 import java.util.ArrayList;
 
 /**
+ * Hold back queue to store message temporarily
  * Created by xy on 5/18/2016.
  */
 public class MessageContainer {
 
+    //use arraylist to store the message, Linkedlist could also be chosen but easy to get errors
     ArrayList<String> msgList;
 
     public MessageContainer() {
@@ -24,13 +26,15 @@ public class MessageContainer {
     }
 
 
+    //reorder queue according to their timestamp
     public synchronized void agreeMsg(String agreeSeq){
 //        System.out.println("agreeSeq: "+agreeSeq);
         int size = msgList.size();
         String msg;
         JSONParser parser = new JSONParser();
         JSONObject objectInList, objectIn;
-        int count = 0;
+
+        //remove same uuid message from hold back queue
         for(int i = 0; i < size; i++){
             msg = msgList.get(i);
             try {
@@ -47,6 +51,7 @@ public class MessageContainer {
             }
         }
 
+        //add the new message into the queue in a proper position
         if(msgList.isEmpty()){
             msgList.add(agreeSeq);
         }
@@ -88,6 +93,7 @@ public class MessageContainer {
 
     }
 
+    //retrieve message from from hold back queue and deliver it
     public  String getMsg() {
         while (!hasMsg()) {
 //            System.out.println("while (!hasMsg()) {");
@@ -113,6 +119,7 @@ public class MessageContainer {
         return null;
     }
 
+    //check whether the queue is empty
     public synchronized boolean hasMsg(){
         if(msgList.isEmpty())
             return false;
