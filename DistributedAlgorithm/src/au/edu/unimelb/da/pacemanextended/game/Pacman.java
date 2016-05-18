@@ -76,12 +76,12 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		b.New = 1;
 
 		/* Manually call the first frameStep to initialize the game. */
-		stepFrame(true);
+		stepFrame(true, -1);
 
 		/* Create a timer that calls stepFrame every 30 milliseconds */
 		frameTimer = new javax.swing.Timer(30, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 stepFrame(false);
+//				 stepFrame(false);
 				if (messageListener.hasMsg()) {
 					String jsonMsgString = messageListener.getMsg();
 					JSONParser jsonParser = new JSONParser();
@@ -151,7 +151,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 	}
 
 	/* Steps the screen forward one frame */
-	public void stepFrame(boolean New) {
+	public void stepFrame(boolean New, int playIDInteger) {
 		/*
 		 * If we aren't on a special screen than the timers can be set to -1 to
 		 * disable them
@@ -227,14 +227,20 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 			 * mode and move if we're in user playable mode. Call the
 			 * appropriate one here
 			 */
-			for (int i = 0; i < GamePlat.playerNumber; i++) {
-				if (b.demo) {
-					b.playerList.get(i).demoMove();
-				} else {
-					b.playerList.get(i).move();
-				}
-				b.playerList.get(i).updatePellet();
+//			for (int i = 0; i < GamePlat.playerNumber; i++) {
+//				if (b.demo) {
+//					b.playerList.get(i).demoMove();
+//				} else {
+//					b.playerList.get(i).move();
+//				}
+//				b.playerList.get(i).updatePellet();
+//			}
+			if (b.demo) {
+				b.playerList.get(playIDInteger).demoMove();
+			} else {
+				b.playerList.get(playIDInteger).move();
 			}
+			b.playerList.get(playIDInteger).updatePellet();
 			
 			/* Also move the ghosts, and update the pellet states */
 			b.ghost1.move();
@@ -259,7 +265,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 			/* If user is dying ... */
 			while (b.dying > 0) {
 				/* Play dying animation. */
-				stepFrame(false);
+				stepFrame(false, -1);
 			}
 
 			/*
@@ -271,7 +277,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 				b.playerList.get(i).direction = 'L';
 				b.playerList.get(i).desiredDirection = 'L';
 				b.playerList.get(i).x = playersInitialPos[i][0];
-				b.playerList.get(i).y = playersInitialPos[i][0];
+				b.playerList.get(i).y = playersInitialPos[i][1];
 			}
 		
 			b.ghost1.x = 180;
@@ -315,7 +321,11 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		jsonObject.put("PlayerID", gamePlat.localPlayerID);
 		jsonObject.put("KeyCode", e.getKeyCode());
 		logger.log(Level.INFO, "JsonMessage: " + jsonObject.toJSONString());
-		gamePlat.messageSender.putMessage(jsonObject.toJSONString());
+		synchronized(gamePlat){
+			gamePlat.node.msg = e.getKeyCode()+" "+gamePlat.localPlayerID;
+			System.out.println(jsonObject.toJSONString()+"%%%");
+		}
+		
 		// handleControlMessage(e.getKeyCode());
 
 	}
@@ -376,7 +386,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 			b.playerList.get(msgFromPlayIDint).desiredDirection = 'D';
 			break;
 		}
-				
+		stepFrame(false, msgFromPlayIDint);
 	}
 
 	/*
