@@ -9,8 +9,10 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import au.edu.unimelb.da.pacemanextended.multicast.MessageCenter;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageReceiver;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageSender;
+import au.edu.unimelb.da.pacemanextended.multicast.simple.SimpleMulticastMessage;
 import au.edu.unimelb.da.pacemanextended.multicast.simple.SimpleMulticastMessageReceiver;
 import au.edu.unimelb.da.pacemanextended.multicast.simple.SimpleMulticastMessageSender;
 
@@ -19,13 +21,15 @@ public class GamePlat {
 	private static final Logger logger = Logger.getLogger(GamePlat.class
 			.getName());
 
-	public static final int playerNumber = 1;
+	public static final int playerNumber = 4;
 	
 	String[] addressArray = {"localhost:40001","localhost:40002","localhost:40003","localhost:40004"};
 
 	public MessageReceiver messageReceiver;
 
 	public MessageSender messageSender;
+	
+	public MessageCenter messageCenter;
 	
 	public String localPlayerID;
 
@@ -138,12 +142,38 @@ public class GamePlat {
 		messageReceiver = new SimpleMulticastMessageReceiver(localPlayerID,
 				severSocketList.getServerSocketList());
 		
+		messageCenter = new SimpleMulticastMessage(messageReceiver, messageSender);
+		
 		return localPlayerID;
 
 	}
 	
 	public static void main(String[] args) {
 		GamePlat gamePlat = new GamePlat();
+		if (gamePlat.messageSender.getPlayerID().equals("player1")) {
+		int count =0;
+		while (true) {
+			 
+			gamePlat.messageCenter.putMessage("player1 Sending Message: "+ ++count);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+	} else {
+		while (true) {
+				System.out.println(gamePlat.messageSender.getPlayerID()+" getting Message:  " + gamePlat.messageCenter.backMessage());
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 	}
 
 }

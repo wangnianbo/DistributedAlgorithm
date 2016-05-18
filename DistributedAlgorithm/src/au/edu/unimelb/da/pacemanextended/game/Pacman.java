@@ -43,6 +43,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 
 	/* This timer is used to do request new frames be drawn */
 	javax.swing.Timer frameTimer;
+	boolean startGameWhile = true;
 
 	GamePlat gamePlat;
 	MessageListener messageListener;
@@ -80,7 +81,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		/* Create a timer that calls stepFrame every 30 milliseconds */
 		frameTimer = new javax.swing.Timer(30, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// stepFrame(false);
+				 stepFrame(false);
 				if (messageListener.hasMsg()) {
 					String jsonMsgString = messageListener.getMsg();
 					JSONParser jsonParser = new JSONParser();
@@ -101,16 +102,20 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		/* Start the timer */
 		frameTimer.start();
 
-	
-		b.requestFocus();
-
 		try {
 			Thread.sleep(100);
-		} catch (Exception e) {
-			// TODO: handle exception
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		
+
+		
+		
 		// directly start the game
 		b.titleScreen = false;
+		b.requestFocus();
+		
 		
 		
 
@@ -282,7 +287,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 			b.repaint(0, 0, 600, 600);
 
 			/* Start advancing frames once again */
-			// b.stopped = false;
+			 b.stopped = false;
 			// frameTimer.start();
 		}
 		/* Otherwise we're in a normal state, advance one frame */
@@ -293,6 +298,18 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 
 	/* Handles user key presses */
 	public void keyPressed(KeyEvent e) {
+		
+		
+		if (startGameWhile == true) {
+			startGameWhile = false;
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}
 		logger.log(Level.INFO, "KeyCode: " + e.getKeyCode());
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("PlayerID", gamePlat.localPlayerID);
@@ -359,9 +376,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 			b.playerList.get(msgFromPlayIDint).desiredDirection = 'D';
 			break;
 		}
-		stepFrame(false);
-		repaint();
-		
+				
 	}
 
 	/*

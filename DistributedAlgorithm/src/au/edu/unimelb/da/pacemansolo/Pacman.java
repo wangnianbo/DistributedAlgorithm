@@ -66,6 +66,14 @@ public class Pacman extends JApplet implements MouseListener, KeyListener
     frameTimer.start();
 
     b.requestFocus();
+    
+    try {
+		Thread.sleep(1000);
+	} catch (Exception e) {
+	}
+    b.titleScreen  =false;
+    
+   
   }
 
   /* This repaint function repaints only the parts of the screen that may have changed.
@@ -221,6 +229,7 @@ public class Pacman extends JApplet implements MouseListener, KeyListener
   /* Handles user key presses*/
   public void keyPressed(KeyEvent e) 
   {
+	  
     /* Pressing a key in the title screen starts a game */
     if (b.titleScreen)
     {
