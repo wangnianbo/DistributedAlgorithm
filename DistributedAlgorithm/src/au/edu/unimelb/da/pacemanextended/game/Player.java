@@ -250,7 +250,6 @@ class Player extends Mover
     {
       currDirection=desiredDirection;
     }
-   
     /* If we didn't move at all, set the stopped flag */    
     if (lastX == x && lastY==y)
       stopped=true;
