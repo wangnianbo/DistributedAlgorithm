@@ -27,9 +27,9 @@ public class GamePlat {
 	private static final Logger logger = Logger.getLogger(GamePlat.class
 			.getName());
 
-	public static final int playerNumber = 4;
+	public static final int playerNumber = 2;
 	
-	String[] addressArray = {"localhost:40001","localhost:40002","localhost:40003","localhost:40004"};
+	String[] addressArray = {"192.168.1.16:40001","192.168.1.17:40002","localhost:40003","localhost:40004"};
 
 	public MessageReceiver messageReceiver;
 
