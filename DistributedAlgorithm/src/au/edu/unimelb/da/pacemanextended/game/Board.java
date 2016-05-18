@@ -78,7 +78,7 @@ public class Board extends JPanel
      pacman is in the process of dying */
   int dying=0;
  
-  /* Score information */
+  /* Score information  */
   int[] currScore;
   int highScore;
 
