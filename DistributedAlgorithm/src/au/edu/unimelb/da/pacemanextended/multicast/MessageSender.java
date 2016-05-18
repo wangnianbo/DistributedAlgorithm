@@ -4,6 +4,11 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The parent of message sender.
+ * @author Bill
+ *
+ */
 public abstract class MessageSender{
 	
 	//string is playerID like player1, player2

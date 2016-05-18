@@ -4,7 +4,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+ * 
+ * the interface of Message Receiver
+ */
 public abstract class MessageReceiver{
 	
 	//string is playerID like player1, player2
