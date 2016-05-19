@@ -42,8 +42,10 @@ public class Decoding {
 			break;
 
 		case "Heartbeat":
-			receive = new String[1];
+			receive = new String[3];
 			receive[0] = "Heartbeat";
+			receive[1] = (String) object.get("source");
+			receive[2] = (String) object.get("id");
 			break;
 
 		default:

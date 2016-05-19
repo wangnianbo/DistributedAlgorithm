@@ -3,6 +3,8 @@
  */
 package au.edu.unimelb.da.pacemanextended.game;
 
+import java.net.SocketException;
+
 import au.edu.unimelb.da.pacemanextended.multicast.MessageReceiver;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageSender;
 import au.edu.unimelb.da.pacemanextended.plat.GamePlat;
@@ -28,12 +30,12 @@ public class Heartbeat extends Thread {
 
 			// set heartbeat timeout and send 
 			try {
-				Thread.sleep(100);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			msg = "Heartbeat";
+			msg = "Heartbeat true "+ messageSender.getPlayerID();
 			encode = new Encoding(msg);
 			msg = encode.encode();
 			messageSender.sendOtherMessage(messageSender.getPlayerID(), msg);

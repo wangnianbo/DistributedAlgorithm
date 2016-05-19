@@ -63,13 +63,14 @@ public class Response_thread extends Thread {
 					synchronized (node) {
 						if (node.state == 1)
 							node.voteCount++;
-						if (node.voteCount == messageReceiver
-								.getServerSocketList().size()) // agree number
+						
+						if (node.voteCount >= (messageReceiver
+								.getServerSocketList().size()/2)&&node.state ==1) // agree number
 						{
 							node.state = 0;
 							node.phase = 2;
 							// send heartbeat message
-							msg = "Heartbeat";
+							msg = "Heartbeat true "+messageSender.getPlayerID();
 							encode = new Encoding(msg);
 							msg = encode.encode();
 							messageSender.sendOtherMessage(
@@ -104,9 +105,20 @@ public class Response_thread extends Thread {
 
 				case "Heartbeat":
 					synchronized (node) {
-						node.reset = true;
-						node.phase = 2;
-						node.notifyAll();
+						if(decodMsg[1].equals("false")){
+							
+						}
+						if(decodMsg[1].equals("true")){
+							node.reset = true;
+							node.phase = 2;
+							node.notifyAll();
+							msg = "Heartbeat false "+messageSender.getPlayerID();
+							encode = new Encoding(msg);
+							msg = encode.encode();
+							messageSender.putMessage(
+									decodMsg[2], msg);
+							System.out.println("Send: " + msg);
+						}
 					}
 					break;
 

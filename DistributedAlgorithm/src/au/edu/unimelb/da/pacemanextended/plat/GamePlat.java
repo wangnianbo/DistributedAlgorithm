@@ -15,6 +15,8 @@ import au.edu.unimelb.da.pacemanextended.game.Time_out;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageCenter;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageReceiver;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageSender;
+import au.edu.unimelb.da.pacemanextended.multicast.isis.IsisMulticastMessage;
+import au.edu.unimelb.da.pacemanextended.multicast.isis.IsisReceivedMessageProcessor;
 import au.edu.unimelb.da.pacemanextended.multicast.raft.RaftMulticastMessage;
 import au.edu.unimelb.da.pacemanextended.multicast.simple.SimpleMulticastMessage;
 import au.edu.unimelb.da.pacemanextended.multicast.simple.SimpleMulticastMessageReceiver;
@@ -27,9 +29,9 @@ public class GamePlat {
 	private static final Logger logger = Logger.getLogger(GamePlat.class
 			.getName());
 
-	public static final int playerNumber = 2;
+	public static final int playerNumber = 3;
 	
-	String[] addressArray = {"192.168.1.16:40001","192.168.1.17:40002","localhost:40003","localhost:40004"};
+	String[] addressArray = {"localhost:40001","localhost:40002","localhost:40003","localhost:40004"};
 
 	public MessageReceiver messageReceiver;
 
@@ -150,8 +152,9 @@ public class GamePlat {
 		messageReceiver = new SimpleMulticastMessageReceiver(localPlayerID,
 				severSocketList.getServerSocketList());
 		
-		messageCenter = new RaftMulticastMessage (messageReceiver, messageSender);
+		messageCenter = new RaftMulticastMessage(messageReceiver, messageSender);
 		
+		//messageCenter = new IsisMulticastMessage(messageReceiver, messageSender);
 		return localPlayerID;
 
 	}

@@ -35,8 +35,11 @@ public class Time_out extends Thread {
 						continue;
 					} else {
 						this.node.signal = true;
+						//this.node.phase = 0;
 						this.node.notifyAll();
 					}
+					
+					
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();

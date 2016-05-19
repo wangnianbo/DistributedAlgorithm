@@ -34,7 +34,7 @@ public class RaftMulticastMessage extends SimpleMulticastMessage {
 		while (true) {
 			String rsult = "";
 
-			synchronized (node) {
+			synchronized (node.backMsg) {
 
 				if (!node.backMsg.equals("")) {
 					rsult = node.backMsg;
@@ -54,7 +54,7 @@ public class RaftMulticastMessage extends SimpleMulticastMessage {
 				return jsonMsgString;
 			}
 			try {
-				Thread.sleep(20);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -69,7 +69,7 @@ public class RaftMulticastMessage extends SimpleMulticastMessage {
 
 	@Override
 	public boolean putMessage(String jsonMsg) {
-		synchronized (node) {
+		synchronized (node.msg) {
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = null;
 			try {

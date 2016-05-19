@@ -38,6 +38,8 @@ public class Encoding {
 
 		case "Heartbeat":
 			object.put("type", "Heartbeat");
+			object.put("source", words[1]);
+			object.put("id", words[2]);
 			break;
 
 		default:
