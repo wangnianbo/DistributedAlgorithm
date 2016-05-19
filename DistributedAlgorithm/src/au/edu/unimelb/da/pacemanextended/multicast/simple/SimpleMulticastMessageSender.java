@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -52,7 +53,10 @@ public class SimpleMulticastMessageSender extends MessageSender {
 				osw.write(jsonMsg);
 				osw.write(System.lineSeparator());
 				osw.flush();
-			} catch (IOException e) {
+			}catch(SocketException e){
+				
+			}
+			catch (IOException e) {
 				
 				e.printStackTrace();
 				return false;
@@ -89,7 +93,10 @@ public class SimpleMulticastMessageSender extends MessageSender {
 					osw.write(jsonMsg);
 					osw.write(System.lineSeparator());
 					osw.flush();
-				} catch (IOException e) {
+				}catch(SocketException e){
+					
+				} 
+				catch (IOException e) {
 					
 					e.printStackTrace();
 					return false;

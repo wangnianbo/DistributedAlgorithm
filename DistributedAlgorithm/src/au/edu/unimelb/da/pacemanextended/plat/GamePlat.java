@@ -16,7 +16,6 @@ import au.edu.unimelb.da.pacemanextended.multicast.MessageCenter;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageReceiver;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageSender;
 
-
 import au.edu.unimelb.da.pacemanextended.multicast.isis.IsisMulticastMessage;
 import au.edu.unimelb.da.pacemanextended.multicast.isis.IsisReceivedMessageProcessor;
 import au.edu.unimelb.da.pacemanextended.multicast.raft.RaftMulticastMessage;
@@ -34,7 +33,7 @@ public class GamePlat {
 
 	public static final int playerNumber = 3;
 	
-	String[] addressArray = {"localhost:40001","localhost:40002","localhost:40003","localhost:40004"};//10.13.233.69
+	String[] addressArray = {"localhost:40001","localhost:40002"," localhost:40003","localhost:40004"};// 10.12.239.20//10.13.233.69//172.20.10.8
 
 	public MessageReceiver messageReceiver;
 
@@ -164,12 +163,13 @@ public class GamePlat {
 
 		
 
-//		messageCenter = new RaftMulticastMessage (messageReceiver, messageSender);
+		messageCenter = new RaftMulticastMessage (messageReceiver, messageSender);
 		
-		messageCenter = new IsisMulticastMessage(messageReceiver, messageSender);
+//		messageCenter = new IsisMulticastMessage(messageReceiver, messageSender);
 
 //		messageCenter = new SimpleMulticastMessage(messageReceiver, messageSender);
 		
+		//messageCenter = new IsisMulticastMessage(messageReceiver, messageSender);
 		return localPlayerID;
 
 	}
