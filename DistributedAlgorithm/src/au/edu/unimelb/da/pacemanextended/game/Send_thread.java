@@ -65,6 +65,13 @@ public class Send_thread extends Thread {
 																// same
 																// timestamp
 																// System.currentTimeMillis()
+					}	
+				} 
+				for(int i=0; i<10000; i++);
+				//System.out.println(node.state+" "+node.phase);
+label:			if (node.phase == 2){
+					
+				//long timestamp = node.Election_timeout(); // local host has same timestamp System.currentTimeMillis()
 					// phase 2 log replication
 					switch (node.state) {
 
