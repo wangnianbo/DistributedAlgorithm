@@ -15,7 +15,12 @@ import au.edu.unimelb.da.pacemanextended.game.Time_out;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageCenter;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageReceiver;
 import au.edu.unimelb.da.pacemanextended.multicast.MessageSender;
+
+
+import au.edu.unimelb.da.pacemanextended.multicast.isis.IsisMulticastMessage;
+import au.edu.unimelb.da.pacemanextended.multicast.isis.IsisReceivedMessageProcessor;
 import au.edu.unimelb.da.pacemanextended.multicast.raft.RaftMulticastMessage;
+
 import au.edu.unimelb.da.pacemanextended.multicast.simple.SimpleMulticastMessage;
 import au.edu.unimelb.da.pacemanextended.multicast.simple.SimpleMulticastMessageReceiver;
 import au.edu.unimelb.da.pacemanextended.multicast.simple.SimpleMulticastMessageSender;
@@ -27,9 +32,9 @@ public class GamePlat {
 	private static final Logger logger = Logger.getLogger(GamePlat.class
 			.getName());
 
-	public static final int playerNumber = 2;
+	public static final int playerNumber = 3;
 	
-	String[] addressArray = {"192.168.1.16:40001","192.168.1.17:40002","localhost:40003","localhost:40004"};
+	String[] addressArray = {"localhost:40001","localhost:40002","localhost:40003","localhost:40004"};//10.13.233.69
 
 	public MessageReceiver messageReceiver;
 
@@ -41,11 +46,13 @@ public class GamePlat {
 	
 	
 
+	/*
+	 * The running environment of the pac-man
+	 */
 	public GamePlat() {
 
 		Properties prop = new Properties();
 		Map<String, String> urlMap = new HashMap<String, String>();
-
 //		try {
 //
 //			input = new FileInputStream("./resources/config/config.properties");
@@ -70,7 +77,6 @@ public class GamePlat {
 //				}
 //			}
 //		}
-
 		
 		for (int i = 0; i < playerNumber; i++) {
 			logger.log(Level.INFO, prop.getProperty("player" + (1 + i)));
@@ -112,6 +118,11 @@ public class GamePlat {
 
 
 
+	/**
+	 * Estanbulish tcp connection between all players
+	 * @param urlMap
+	 * @return
+	 */
 	private String setNetworkConnection(Map<String, String> urlMap) {
 		String localPlayerID = null;
 		Map<String, Socket> senderSocketMap = new HashMap<String, Socket>();
@@ -150,7 +161,14 @@ public class GamePlat {
 		messageReceiver = new SimpleMulticastMessageReceiver(localPlayerID,
 				severSocketList.getServerSocketList());
 		
-		messageCenter = new RaftMulticastMessage(messageReceiver, messageSender);
+
+		
+
+//		messageCenter = new RaftMulticastMessage (messageReceiver, messageSender);
+		
+		messageCenter = new IsisMulticastMessage(messageReceiver, messageSender);
+
+//		messageCenter = new SimpleMulticastMessage(messageReceiver, messageSender);
 		
 		return localPlayerID;
 
@@ -158,7 +176,31 @@ public class GamePlat {
 	
 	public static void main(String[] args) {
 		GamePlat gamePlat = new GamePlat();
-		
+		if (gamePlat.messageSender.getPlayerID().equals("player1")) {
+		int count =0;
+		while (true) {
+			 
+			gamePlat.messageCenter.putMessage("player1 Sending Message: "+ ++count);
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+	} else {
+		while (true) {
+				System.out.println(gamePlat.messageSender.getPlayerID()+" getting Message:  " + gamePlat.messageCenter.backMessage());
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
 	}
 
 }
