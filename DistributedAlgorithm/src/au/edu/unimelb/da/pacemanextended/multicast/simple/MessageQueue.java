@@ -3,6 +3,11 @@ package au.edu.unimelb.da.pacemanextended.multicast.simple;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * Message queue
+ * @author Bill
+ *
+ */
 public class MessageQueue {
 	private Queue<String> msgQueue = new LinkedList<String>();
 	public synchronized void put(String message) {

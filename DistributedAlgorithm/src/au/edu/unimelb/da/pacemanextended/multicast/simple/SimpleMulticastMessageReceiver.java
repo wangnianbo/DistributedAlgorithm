@@ -7,6 +7,11 @@ import au.edu.unimelb.da.pacemanextended.multicast.MessageReceiver;
 import au.edu.unimelb.da.pacemanextended.multicast.simple.MessageQueue;
 import au.edu.unimelb.da.pacemanextended.multicast.simple.ReceiverThread;
 
+/**
+ * Simple Multicast Message Receiver
+ * @author Bill
+ *
+ */
 public class SimpleMulticastMessageReceiver extends MessageReceiver{
 	
 	

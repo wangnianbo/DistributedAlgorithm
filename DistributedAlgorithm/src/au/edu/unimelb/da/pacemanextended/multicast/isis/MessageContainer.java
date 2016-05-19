@@ -98,7 +98,7 @@ public class MessageContainer {
         while (!hasMsg()) {
 //            System.out.println("while (!hasMsg()) {");
             try {
-                Thread.sleep(500);
+                Thread.sleep(20);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

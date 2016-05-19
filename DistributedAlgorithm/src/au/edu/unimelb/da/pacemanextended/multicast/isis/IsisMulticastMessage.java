@@ -37,6 +37,7 @@ public class IsisMulticastMessage extends SimpleMulticastMessage {
         json.put("uuid", uuid); //unique id for each message from game center
         json.put("msgbody", jsonMsg);
         json.put("type", 0);    //type 0, initial the message
+        
         super.putMessage(json.toString());
 
         return true;
@@ -52,7 +53,6 @@ public class IsisMulticastMessage extends SimpleMulticastMessage {
         json.put("uuid", uuid); //unique id for each message from game center
         json.put("msgbody", jsonMsg);
         json.put("type", 0);    //type 0, initial the message
-        super.putMessage(json.toString());
 //        System.out.print(":SENDING");
         //super.backMessage();
         return super.putMessage(json.toString());

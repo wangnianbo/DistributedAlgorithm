@@ -6,6 +6,11 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketException;
 
+/**
+ * Message Receiver
+ * @author Bill
+ *
+ */
 public class ReceiverThread extends Thread {
 
 	private int playerId;

@@ -37,6 +37,7 @@ public class IsisReceivedMessageProcessor extends
             JSONParser parser = new JSONParser();
             JSONObject object = null;
             try {
+            	System.out.println("messageString: "+messageString);
                  object = (JSONObject)parser.parse(messageString);
             } catch (ParseException e) {
                 e.printStackTrace();

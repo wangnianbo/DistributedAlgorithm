@@ -4,6 +4,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Sever Socket Container
+ * @author Bill
+ *
+ */
 public class SeverSocketList {
 	
 	private List<Socket> serverSocketList = new ArrayList<Socket>();

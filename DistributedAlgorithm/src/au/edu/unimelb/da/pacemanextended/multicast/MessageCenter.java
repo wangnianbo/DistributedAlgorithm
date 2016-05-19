@@ -1,6 +1,10 @@
 package au.edu.unimelb.da.pacemanextended.multicast;
 
-
+/**
+ * the parent of sender and receiver
+ * @author Bill
+ *
+ */
 public abstract class MessageCenter {
 	
 	public MessageReceiver messageReceiver;
