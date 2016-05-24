@@ -44,14 +44,14 @@ public class RaftMulticastMessage extends SimpleMulticastMessage {
 				
 			}
 			if(!"".equals(rsult)){
-				String[] words = rsult.split(" ");
-				JSONObject jsonObject1 = new JSONObject();
-			
-				jsonObject1.put("PlayerID", words[1]);
-				jsonObject1.put("KeyCode", Integer.parseInt(words[0]));
-				
-				String jsonMsgString =jsonObject1.toJSONString();
-				return jsonMsgString;
+//				String[] words = rsult.split(" ");
+//				JSONObject jsonObject1 = new JSONObject();
+//			
+//				jsonObject1.put("PlayerID", words[1]);
+//				jsonObject1.put("KeyCode", Integer.parseInt(words[0]));
+//				
+//				String jsonMsgString =jsonObject1.toJSONString();
+				return rsult;
 			}
 			try {
 				Thread.sleep(50);
@@ -70,22 +70,22 @@ public class RaftMulticastMessage extends SimpleMulticastMessage {
 	@Override
 	public boolean putMessage(String jsonMsg) {
 		synchronized (node.msg) {
-			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonObject = null;
-			try {
-				jsonObject = (JSONObject) jsonParser.parse(jsonMsg);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			JSONParser jsonParser = new JSONParser();
+//			JSONObject jsonObject = null;
+//			try {
+//				jsonObject = (JSONObject) jsonParser.parse(jsonMsg);
+//			} catch (ParseException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//
+//			String keycode = Long.toString((long) jsonObject.get("KeyCode"));
+//			
+//			
+//			String localPlayerID = (String) jsonObject.get("PlayerID");
+			
 
-			String keycode = Long.toString((long) jsonObject.get("KeyCode"));
-			
-			
-			String localPlayerID = (String) jsonObject.get("PlayerID");
-			
-
-			node.msg = keycode + " " + localPlayerID;
+			node.msg = jsonMsg ;
 		}
 		return true;
 	}

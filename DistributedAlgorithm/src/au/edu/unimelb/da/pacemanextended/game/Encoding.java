@@ -23,9 +23,9 @@ public class Encoding {
 
 		case "Message":
 			object.put("type", "Message");
-			object.put("content", words[1] + " " + words[2]);
-			object.put("timestamp", words[3]);
-			object.put("leadersignal", words[4]);
+			object.put("content", words[1] + " " + words[2] + " " + words[3]);
+			object.put("timestamp", words[4]);
+			object.put("leadersignal", words[5]);
 			break;
 
 		case "Request":

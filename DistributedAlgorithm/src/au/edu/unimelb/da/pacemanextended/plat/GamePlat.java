@@ -162,13 +162,13 @@ public class GamePlat {
 		messageSender = new SimpleMulticastMessageSender(localPlayerID, senderSocketMap);
 		messageReceiver = new SimpleMulticastMessageReceiver(localPlayerID, severSocketList.getServerSocketList());
 
-		// messageCenter = new RaftMulticastMessage (messageReceiver,
-		// messageSender);
+		 messageCenter = new RaftMulticastMessage (messageReceiver,
+		 messageSender);
 
-		// messageCenter = new IsisMulticastMessage(messageReceiver,
-		// messageSender);
+//		 messageCenter = new IsisMulticastMessage(messageReceiver,
+//		 messageSender);
 
-		messageCenter = new SimpleMulticastMessage(messageReceiver, messageSender);
+//		messageCenter = new SimpleMulticastMessage(messageReceiver, messageSender);
 
 		// messageCenter = new IsisMulticastMessage(messageReceiver,
 		// messageSender);
@@ -209,13 +209,52 @@ public class GamePlat {
 		// }
 
 		// round timer
-		playerNumber = 2;
-		Integer numberOfTest = 100;
+//		playerNumber = 2;
+//		Integer numberOfTest = 10;
+//		String resultFileName = "RoundTime_" + playerNumber + "players_" + simpleDateFormat.format(new Date()) + ".txt";
+//		GamePlat gamePlat = new GamePlat();
+//		TestMulicastRoundMessageProssor testMulicastRoundMessageProssor = new TestMulicastRoundMessageProssor(
+//				gamePlat.messageCenter, numberOfTest * (playerNumber - 1), resultFileName);
+//		testMulicastRoundMessageProssor.start();
+//		try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		for (int i = 0; i < numberOfTest; i++) {
+//			for (int j = 0; j < playerNumber; j++) {
+//				JSONObject jsonObject = new JSONObject();
+//				jsonObject.put("Time", new Date().getTime());
+//				jsonObject.put("Sender", gamePlat.localPlayerID);
+//				String receiver = "player" + (j + 1);
+//				if (!gamePlat.localPlayerID.equals(receiver)) {
+//					gamePlat.messageCenter.putMessage(receiver, jsonObject.toJSONString());
+//				}
+//				try {
+//					Thread.sleep(1000);
+//				} catch (InterruptedException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+//			}
+//
+//		}
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		gamePlat.messageCenter.putMessage("Done");
+		
+		playerNumber = 1;
+		Integer numberOfTest = 10;
 		String resultFileName = "RoundTime_" + playerNumber + "players_" + simpleDateFormat.format(new Date()) + ".txt";
 		GamePlat gamePlat = new GamePlat();
-		TestMulicastRoundMessageProssor testMulicastRoundMessageProssor = new TestMulicastRoundMessageProssor(
+		TestMulicastRoundRaftMessageProssor testMulicastRoundRaftMessageProssor = new TestMulicastRoundRaftMessageProssor(
 				gamePlat.messageCenter, numberOfTest * (playerNumber - 1), resultFileName);
-		testMulicastRoundMessageProssor.start();
+		testMulicastRoundRaftMessageProssor.start();
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e1) {
@@ -224,15 +263,10 @@ public class GamePlat {
 		}
 		for (int i = 0; i < numberOfTest; i++) {
 			for (int j = 0; j < playerNumber; j++) {
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("Time", new Date().getTime());
-				jsonObject.put("Sender", gamePlat.localPlayerID);
-				String receiver = "player" + (j + 1);
-				if (!gamePlat.localPlayerID.equals(receiver)) {
-					gamePlat.messageCenter.putMessage(receiver, jsonObject.toJSONString());
-				}
+				String message = gamePlat.localPlayerID+" "+(new Date()).getTime() + "null";
+				gamePlat.messageCenter.putMessage(message);
 				try {
-					Thread.sleep(200);
+					Thread.sleep(1000);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -246,7 +280,7 @@ public class GamePlat {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		gamePlat.messageCenter.putMessage("Done");
+		gamePlat.messageCenter.putMessage("Done_Done_Done");
 
 		// if (gamePlat.messageSender.getPlayerID().equals("player1")) {
 		// int count =0;
