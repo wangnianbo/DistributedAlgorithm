@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 
 import org.json.simple.JSONObject;
 
+import com.sun.glass.ui.TouchInputSupport;
 import com.sun.org.apache.xerces.internal.util.EntityResolver2Wrapper;
 
 import au.edu.unimelb.da.pacemanextended.game.Node;
@@ -38,9 +39,9 @@ public class GamePlat {
 
 	private static final Logger logger = Logger.getLogger(GamePlat.class.getName());
 
-	public static int playerNumber = 3;
+	public static int playerNumber;
 
-	String[] addressArray = { "192.168.1.20:40001", "192.168.1.19:40002", "localhost:40003", "localhost:40004" };// 10.12.239.20//10.13.233.69//172.20.10.8
+	String[] addressArray = { "192.168.1.20:40001", "192.168.1.19:40002", "192.168.1.11:40003", "localhost:40004" };// 10.12.239.20//10.13.233.69//172.20.10.8
 
 	public MessageReceiver messageReceiver;
 
