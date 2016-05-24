@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 
 import org.json.simple.JSONObject;
 
-import com.sun.media.jfxmedia.events.NewFrameEvent;
 import com.sun.org.apache.xerces.internal.util.EntityResolver2Wrapper;
 
 import au.edu.unimelb.da.pacemanextended.game.Node;
