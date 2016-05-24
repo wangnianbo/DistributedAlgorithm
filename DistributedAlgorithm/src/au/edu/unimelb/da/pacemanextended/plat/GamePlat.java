@@ -248,7 +248,7 @@ public class GamePlat {
 //		}
 //		gamePlat.messageCenter.putMessage("Done");
 		
-		playerNumber = 1;
+		playerNumber = 2;
 		Integer numberOfTest = 10;
 		String resultFileName = "RoundTime_" + playerNumber + "players_" + simpleDateFormat.format(new Date()) + ".txt";
 		GamePlat gamePlat = new GamePlat();
@@ -263,7 +263,7 @@ public class GamePlat {
 		}
 		for (int i = 0; i < numberOfTest; i++) {
 			for (int j = 0; j < playerNumber; j++) {
-				String message = gamePlat.localPlayerID+" "+(new Date()).getTime() + "null";
+				String message = gamePlat.localPlayerID+" "+(new Date()).getTime() + " null";
 				gamePlat.messageCenter.putMessage(message);
 				try {
 					Thread.sleep(1000);

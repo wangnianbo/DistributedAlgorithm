@@ -16,6 +16,7 @@ public class Encoding {
 	public String encode() {
 
 		// get word from string which seperated by white space
+		//System.out.println(msg);
 		String[] words = msg.split(" ");
 		JSONObject object = new JSONObject();
 		JSONArray list = new JSONArray();

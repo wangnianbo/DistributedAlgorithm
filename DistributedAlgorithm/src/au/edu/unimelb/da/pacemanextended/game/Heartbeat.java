@@ -39,7 +39,7 @@ public class Heartbeat extends Thread {
 			encode = new Encoding(msg);
 			msg = encode.encode();
 			messageSender.sendOtherMessage(messageSender.getPlayerID(), msg);
-			System.out.println("Send: " + msg);
+//			System.out.println("Send: " + msg);
 			msg = "";
 
 			// during one heart beat send messages to all nodes

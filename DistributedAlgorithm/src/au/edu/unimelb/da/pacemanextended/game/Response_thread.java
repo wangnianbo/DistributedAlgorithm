@@ -33,7 +33,7 @@ public class Response_thread extends Thread {
 			try {
 				// decode the json message
 				msg = messageReceiver.backMessage();
-				System.out.println("Receive: " + msg);
+//				System.out.println("Receive: " + msg);
 				decode = new Decoding(msg);
 				String[] decodMsg = new String[decode.decode().length];
 				for (int i = 0; i < decode.decode().length; i++) {
@@ -117,7 +117,7 @@ public class Response_thread extends Thread {
 							msg = encode.encode();
 							messageSender.putMessage(
 									decodMsg[2], msg);
-							System.out.println("Send: " + msg);
+//							System.out.println("Send: " + msg);
 						}
 					}
 					break;
