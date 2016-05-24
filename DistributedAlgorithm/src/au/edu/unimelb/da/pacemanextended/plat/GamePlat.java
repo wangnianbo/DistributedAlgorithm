@@ -280,7 +280,7 @@ public class GamePlat {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		gamePlat.messageCenter.putMessage("Done_Done_Done");
+		gamePlat.messageCenter.putMessage("Done Done Done");
 
 		// if (gamePlat.messageSender.getPlayerID().equals("player1")) {
 		// int count =0;

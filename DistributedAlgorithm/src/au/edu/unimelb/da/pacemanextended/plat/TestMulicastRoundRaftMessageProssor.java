@@ -28,17 +28,19 @@ public class TestMulicastRoundRaftMessageProssor extends Thread{
 		while (true) {
 			
 			messageString = messageCenter.backMessage();
-			if("Done_Done_Done".equals(messageString)){
+			System.out.println(messageString);
+			if("Done Done Done".equals(messageString)){
 				break;
 			}
+			
 			String[] messages = messageString.split(" "); 
 			if(!"null".equals(messages[2])){
 				String record = messages[0]+"\t"+messages[2]+"\t"
 			+(new Date().getTime() -Long.parseLong(messages[1]) )+"\n";
-				System.out.println(record);
 				result.append(record);
 			}else {
-				messageCenter.putMessage(messages[0], messages[0]+" "+messages[1]+" "+messageCenter.messageSender.getPlayerID());
+				messageCenter.putMessage( messages[0]+" "+messages[1]+" "
+			+messageCenter.messageSender.getPlayerID());
 			}
 		}
 		File file = new File(fileName);
