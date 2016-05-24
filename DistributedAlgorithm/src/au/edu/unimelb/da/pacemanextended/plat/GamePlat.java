@@ -41,7 +41,7 @@ public class GamePlat {
 
 	public static int playerNumber = 3;
 
-	String[] addressArray = { "localhost:40001", "localhost:40002", "localhost:40003", "localhost:40004" };// 10.12.239.20//10.13.233.69//172.20.10.8
+	String[] addressArray = { "192.168.1.20:40001", "localhost:40002", "localhost:40003", "localhost:40004" };// 10.12.239.20//10.13.233.69//172.20.10.8
 
 	public MessageReceiver messageReceiver;
 
@@ -180,60 +180,60 @@ public class GamePlat {
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 		// multicast order
-		/*
-		 * playerNumber = 3; Integer numberOfTest = 100; String resultFileName
-		 * ="multicastOrder_"+playerNumber+"players_"+simpleDateFormat.format(
-		 * new Date())+".txt"; GamePlat gamePlat = new GamePlat();
-		 * TestMulicastOrderMessageProssor testMulicastOrderMessageProssor = new
-		 * TestMulicastOrderMessageProssor(gamePlat.messageCenter,
-		 * numberOfTest*playerNumber, resultFileName);
-		 * testMulicastOrderMessageProssor.start(); try { Thread.sleep(5000); }
-		 * catch (InterruptedException e1) { // TODO Auto-generated catch block
-		 * e1.printStackTrace(); } for (int i = 0; i < numberOfTest; i++) {
-		 * 
-		 * gamePlat.messageCenter.putMessage(UUID.randomUUID());
-		 * 
-		 * }
-		 */
+		
+		  playerNumber = 3; Integer numberOfTest = 100; String resultFileName
+		  ="multicastOrder_"+playerNumber+"players_"+simpleDateFormat.format(
+		  new Date())+".txt"; 
+		  GamePlat gamePlat = new GamePlat();
+		  TestMulicastOrderMessageProssor testMulicastOrderMessageProssor = new
+		  TestMulicastOrderMessageProssor(gamePlat.messageCenter,
+		  numberOfTest*playerNumber, resultFileName);
+		  testMulicastOrderMessageProssor.start(); try { Thread.sleep(5000); }
+		  catch (InterruptedException e1) { // TODO Auto-generated catch block
+		  e1.printStackTrace(); } for (int i = 0; i < numberOfTest; i++) {
+		  
+		  gamePlat.messageCenter.putMessage(UUID.randomUUID().toString());
+		  
+		  }
+		 
 		// round timer
-		// multicast order
-		playerNumber = 2;
-		Integer numberOfTest = 10;
-		String resultFileName = "RoundTime_" + playerNumber + "players_" + simpleDateFormat.format(new Date()) + ".txt";
-		GamePlat gamePlat = new GamePlat();
-		TestMulicastRoundMessageProssor testMulicastRoundMessageProssor = new TestMulicastRoundMessageProssor(
-				gamePlat.messageCenter, numberOfTest * (playerNumber - 1), resultFileName);
-		testMulicastRoundMessageProssor.start();
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		for (int i = 0; i < numberOfTest; i++) {
-			for (int j = 0; j < playerNumber; j++) {
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("Time", new Date().getTime());
-				jsonObject.put("Sender", gamePlat.localPlayerID);
-				String receiver = "player" + (j + 1);
-				if (!gamePlat.localPlayerID.equals(receiver)) {
-					gamePlat.messageCenter.putMessage(receiver, jsonObject.toJSONString());
-				}
-				try {
-					Thread.sleep(200);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-
-		}
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		playerNumber = 2;
+//		Integer numberOfTest = 10;
+//		String resultFileName = "RoundTime_" + playerNumber + "players_" + simpleDateFormat.format(new Date()) + ".txt";
+//		GamePlat gamePlat = new GamePlat();
+//		TestMulicastRoundMessageProssor testMulicastRoundMessageProssor = new TestMulicastRoundMessageProssor(
+//				gamePlat.messageCenter, numberOfTest * (playerNumber - 1), resultFileName);
+//		testMulicastRoundMessageProssor.start();
+//		try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		for (int i = 0; i < numberOfTest; i++) {
+//			for (int j = 0; j < playerNumber; j++) {
+//				JSONObject jsonObject = new JSONObject();
+//				jsonObject.put("Time", new Date().getTime());
+//				jsonObject.put("Sender", gamePlat.localPlayerID);
+//				String receiver = "player" + (j + 1);
+//				if (!gamePlat.localPlayerID.equals(receiver)) {
+//					gamePlat.messageCenter.putMessage(receiver, jsonObject.toJSONString());
+//				}
+//				try {
+//					Thread.sleep(200);
+//				} catch (InterruptedException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+//			}
+//
+//		}
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		gamePlat.messageCenter.putMessage("Done");
 
 		// if (gamePlat.messageSender.getPlayerID().equals("player1")) {
