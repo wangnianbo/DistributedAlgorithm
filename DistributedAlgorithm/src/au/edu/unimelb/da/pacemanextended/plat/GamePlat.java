@@ -181,71 +181,71 @@ public class GamePlat {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 		// multicast order
 
-		playerNumber = 2;
-		Integer numberOfTest = 100;
-		String resultFileName = "multicastOrder_" + playerNumber + "players_" + simpleDateFormat.format(new Date())
-				+ ".txt";
-		GamePlat gamePlat = new GamePlat();
-		TestMulicastOrderMessageProssor testMulicastOrderMessageProssor = new TestMulicastOrderMessageProssor(
-				gamePlat.messageCenter, numberOfTest * playerNumber, resultFileName);
-		testMulicastOrderMessageProssor.start();
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e1) { // TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		for (int i = 0; i < numberOfTest; i++) {
-
-			gamePlat.messageCenter.putMessage(UUID.randomUUID().toString());
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e1) { // TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-
-		// round timer
-		// playerNumber = 2;
-		// Integer numberOfTest = 10;
-		// String resultFileName = "RoundTime_" + playerNumber + "players_" +
-		// simpleDateFormat.format(new Date()) + ".txt";
+		// playerNumber = 3;
+		// Integer numberOfTest = 100;
+		// String resultFileName = "multicastOrder_" + playerNumber + "players_"
+		// + simpleDateFormat.format(new Date())
+		// + ".txt";
 		// GamePlat gamePlat = new GamePlat();
-		// TestMulicastRoundMessageProssor testMulicastRoundMessageProssor = new
-		// TestMulicastRoundMessageProssor(
-		// gamePlat.messageCenter, numberOfTest * (playerNumber - 1),
-		// resultFileName);
-		// testMulicastRoundMessageProssor.start();
+		// TestMulicastOrderMessageProssor testMulicastOrderMessageProssor = new
+		// TestMulicastOrderMessageProssor(
+		// gamePlat.messageCenter, numberOfTest * playerNumber, resultFileName);
+		// testMulicastOrderMessageProssor.start();
 		// try {
-		// Thread.sleep(2000);
-		// } catch (InterruptedException e1) {
-		// // TODO Auto-generated catch block
+		// Thread.sleep(5000);
+		// } catch (InterruptedException e1) { // TODO Auto-generated catch
+		// block
 		// e1.printStackTrace();
 		// }
 		// for (int i = 0; i < numberOfTest; i++) {
-		// for (int j = 0; j < playerNumber; j++) {
-		// JSONObject jsonObject = new JSONObject();
-		// jsonObject.put("Time", new Date().getTime());
-		// jsonObject.put("Sender", gamePlat.localPlayerID);
-		// String receiver = "player" + (j + 1);
-		// if (!gamePlat.localPlayerID.equals(receiver)) {
-		// gamePlat.messageCenter.putMessage(receiver,
-		// jsonObject.toJSONString());
-		// }
+		//
+		// gamePlat.messageCenter.putMessage(UUID.randomUUID().toString());
 		// try {
-		// Thread.sleep(200);
-		// } catch (InterruptedException e1) {
-		// // TODO Auto-generated catch block
+		// Thread.sleep(50);
+		// } catch (InterruptedException e1) { // TODO Auto-generated catch
+		// block
 		// e1.printStackTrace();
 		// }
 		// }
-		//
-		// }
-		// try {
-		// Thread.sleep(5000);
-		// } catch (InterruptedException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
+
+		// round timer
+		playerNumber = 2;
+		Integer numberOfTest = 100;
+		String resultFileName = "RoundTime_" + playerNumber + "players_" + simpleDateFormat.format(new Date()) + ".txt";
+		GamePlat gamePlat = new GamePlat();
+		TestMulicastRoundMessageProssor testMulicastRoundMessageProssor = new TestMulicastRoundMessageProssor(
+				gamePlat.messageCenter, numberOfTest * (playerNumber - 1), resultFileName);
+		testMulicastRoundMessageProssor.start();
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		for (int i = 0; i < numberOfTest; i++) {
+			for (int j = 0; j < playerNumber; j++) {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("Time", new Date().getTime());
+				jsonObject.put("Sender", gamePlat.localPlayerID);
+				String receiver = "player" + (j + 1);
+				if (!gamePlat.localPlayerID.equals(receiver)) {
+					gamePlat.messageCenter.putMessage(receiver, jsonObject.toJSONString());
+				}
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+
+		}
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		gamePlat.messageCenter.putMessage("Done");
 
 		// if (gamePlat.messageSender.getPlayerID().equals("player1")) {
